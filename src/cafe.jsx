@@ -65,7 +65,7 @@ export function CafeLayout() {
 export function CafePage({ page }) {
   useEffect(() => {
     const titles = { home: 'A neighbourhood table in Lucknow', menu: 'Seasonal menu', about: 'Our story', contact: 'Find us in Hazratganj', book: 'Reserve your table' }
-    updatePageMeta(`${titles[page]} — Maison Ember`, `${titles[page]} at Maison Ember, a contemporary neighbourhood restaurant & café concept in Hazratganj, Lucknow crafted by Kriya Labs.`)
+    updatePageMeta(`${titles[page]} — Maison Ember`, `${titles[page]} at Maison Ember, a contemporary neighbourhood restaurant & café concept in Hazratganj, Lucknow crafted by elev8rix.`)
   }, [page])
 
   if (page === 'home') return (
@@ -193,8 +193,8 @@ export function CafePage({ page }) {
         <DemoForm title="Table reservation request" button="Request a table" storage="maison-ember-bookings" fields={fieldset('book')} />
         <aside className="reservation-aside">
           <img src={img('photo-1414235077428-338989a2e8c0', 650)} alt="Warm evening dining at Maison Ember" />
-          <h3>A note from Kriya Labs</h3>
-          <p>This is an interactive hospitality concept built by Kriya Labs. Your reservation request is saved locally in your browser.</p>
+          <h3>A note from elev8rix</h3>
+          <p>This is an interactive hospitality concept built by elev8rix. Your reservation request is saved locally in your browser.</p>
           <span>For private dining over 8 guests, please reach out directly.</span>
         </aside>
       </div>

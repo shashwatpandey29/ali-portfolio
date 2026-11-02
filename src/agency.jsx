@@ -21,11 +21,11 @@ export function AgencyLayout() {
         <CustomCursor />
         <ScrollProgress />
         <div className="concept-ribbon">
-          <span><Asterisk size={12} /> {agency.name} · Lucknow, India · Working worldwide</span>
+          <span><Asterisk size={12} /> {agency.name} · India · Working worldwide</span>
           <Link to="/contact">Start a conversation <ArrowRight size={12} /></Link>
         </div>
         <SiteNav
-          brand={{ name: agency.name, mark: agency.mark, sub: 'LUCKNOW · INDIA' }}
+          brand={{ name: agency.name, mark: agency.mark, sub: 'INDIA' }}
           links={nav}
           cta={["Let's talk", '/contact']}
           mobileCta={['Talk through a project', '/contact']}
@@ -34,15 +34,17 @@ export function AgencyLayout() {
         <PageTransition />
         <SiteFooter
           brand={{ name: agency.name, mark: agency.mark }}
-          note="An independent digital engineering & design studio in Lucknow, India, crafting next-generation websites, web apps, and AI systems for ambitious brands worldwide."
+          note="An independent digital engineering & design studio in India, crafting next-generation websites, web apps, and AI systems for ambitious brands worldwide."
           links={[
             ['Services', '/services'],
             ['Selected work', '/work'],
-            ['About Kriya Labs', '/about'],
+            ['About elev8rix', '/about'],
             ['Contact', '/contact'],
             ['Maison Ember demo', '/projects/cafe'],
             ['Northfield demo', '/projects/school'],
             ['UrbanNest demo', '/projects/business'],
+            ['Forge Athletics demo', '/projects/fitness'],
+            ['Alder & Rowe demo', '/projects/legal'],
             ['Email us', `mailto:${agency.email}`],
           ]}
         />
@@ -71,7 +73,7 @@ function HeroSection() {
       <div className="hero-content wrap">
         <div className="hero-copy">
           <motion.div custom={0} initial="hidden" animate="visible" variants={fade}>
-            <Eyebrow>Kriya Labs · Creative Action &amp; Engineering</Eyebrow>
+            <Eyebrow>elev8rix · Elevate your business</Eyebrow>
           </motion.div>
 
           <motion.h1 custom={0.08} initial="hidden" animate="visible" variants={fade}>
@@ -80,7 +82,7 @@ function HeroSection() {
           </motion.h1>
 
           <motion.p className="hero-lead" custom={0.16} initial="hidden" animate="visible" variants={fade}>
-            For growing businesses, Kriya Labs designs and builds websites, web apps, and practical AI automations around your customers, goals, and day-to-day work.
+            We design and build digital experiences that help growing businesses reach higher—from first impression to everyday operations.
           </motion.p>
 
           <motion.div className="hero-actions" custom={0.24} initial="hidden" animate="visible" variants={fade}>
@@ -90,7 +92,7 @@ function HeroSection() {
 
           <motion.div className="hero-caption" custom={0.35} initial="hidden" animate="visible" variants={fade}>
             <span className="caption-line" />
-            <span>Strategy, design &amp; engineering · Lucknow, India</span>
+            <span>Strategy, design &amp; engineering · India</span>
           </motion.div>
         </div>
 
@@ -135,8 +137,8 @@ function HeroSection() {
             transition={{ duration: 0.6, delay: 0.55 }}
           >
             <Sparkles size={18} style={{ marginBottom: 4 }} />
-            <span style={{ fontSize: 9 }}>Kriya</span>
-            <span style={{ fontSize: 9 }}>Labs · IN</span>
+            <span style={{ fontSize: 9 }}>elev8rix</span>
+            <span style={{ fontSize: 9 }}>Digital · IN</span>
           </motion.div>
         </div>
       </div>
@@ -148,8 +150,8 @@ function HeroSection() {
 export function AgencyHome() {
   useEffect(() => {
     updatePageMeta(
-      `${agency.name} — Websites, Apps & AI Automation`,
-      'Kriya Labs is a digital design and engineering studio in Lucknow, India, building websites, web apps, and practical AI automations for growing businesses.'
+      `${agency.name} — Elevate your business`,
+      'elev8rix elevates your business with considered websites, apps, and AI automation for growing teams in hospitality, fitness, legal, education, and services.'
     )
   }, [])
 
@@ -160,12 +162,12 @@ export function AgencyHome() {
       {/* Ticker */}
       <div className="ticker">
         <div className="ticker-track" aria-hidden="true">
-          {['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation', 'Mobile Apps', 'E-Commerce', 'Lucknow · India', 'Global Delivery'].map((x, i) => (
+          {['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation', 'Mobile Apps', 'E-Commerce', 'India', 'Global Delivery'].map((x, i) => (
             <span key={i} style={{ padding: '0 28px', display: 'inline-flex', alignItems: 'center', gap: 28 }}>
               {x} <span style={{ color: 'var(--electric)', fontSize: 16 }}>✦</span>
             </span>
           ))}
-          {['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation', 'Mobile Apps', 'E-Commerce', 'Lucknow · India', 'Global Delivery'].map((x, i) => (
+          {['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation', 'Mobile Apps', 'E-Commerce', 'India', 'Global Delivery'].map((x, i) => (
             <span key={`b-${i}`} style={{ padding: '0 28px', display: 'inline-flex', alignItems: 'center', gap: 28 }}>
               {x} <span style={{ color: 'var(--electric)', fontSize: 16 }}>✦</span>
             </span>
@@ -178,16 +180,16 @@ export function AgencyHome() {
         <div className="intro-section">
           <Reveal>
             <div>
-              <Eyebrow>Rooted in Lucknow · Built for the world</Eyebrow>
-              <h2 className="section-h2">Clarity first.<br /><em>Kriya always.</em></h2>
+              <Eyebrow>Rooted in India · Built for the world</Eyebrow>
+              <h2 className="section-h2">Clear thinking.<br /><em>Higher impact.</em></h2>
             </div>
           </Reveal>
           <Reveal delay={0.08}>
             <div>
               <p className="section-lead">
-                "Kriya" means intentional, creative action. We bring strategy, design, and engineering together to make useful digital experiences for customers and the teams who serve them.
+                elev8rix is built around one idea: make useful digital experiences that move a business forward. We bring strategy, design, and engineering together around the people your business serves.
               </p>
-              <ArrowLink to="/about">Get to know Kriya Labs</ArrowLink>
+              <ArrowLink to="/about">Get to know elev8rix</ArrowLink>
             </div>
           </Reveal>
         </div>
@@ -309,7 +311,7 @@ function WorkPreview() {
             <Eyebrow>Selected concepts</Eyebrow>
             <h2 className="section-h2">Different stories.<br /><em>Made tangible.</em></h2>
           </div>
-          <p>Three self-initiated concepts showing how tailored digital experiences can support hospitality, education, and home-service businesses.</p>
+          <p>Five self-initiated concepts show how tailored digital experiences can support hospitality, education, home services, fitness, and legal practices.</p>
         </div>
 
         <div className="project-grid">
@@ -367,7 +369,7 @@ function ProcessSection() {
             <Eyebrow>A clear path forward</Eyebrow>
             <h2 className="section-h2">Thoughtful from<br /><em>first hello.</em></h2>
             <p className="section-lead" style={{ marginTop: 16 }}>
-              Whether you're a founder in Lucknow, Bengaluru, or half a world away, we work as an extension of your team with transparent sprints and direct communication.
+              Whether you're based in India or half a world away, we work as an extension of your team with transparent sprints and direct communication.
             </p>
             <CtaLink to="/contact" secondary>Talk through an idea</CtaLink>
           </div>
@@ -418,12 +420,12 @@ export function AgencyPage({ page }) {
     const titles = {
       services: 'Digital engineering, WebGL & AI services',
       work: 'Selected interactive concept projects',
-      about: 'About Kriya Labs · Lucknow, India',
+      about: 'About elev8rix · India',
       contact: 'Start a project conversation',
     }
     updatePageMeta(
       `${titles[page]} — ${agency.name}`,
-      `${titles[page]} from ${agency.name}, an independent digital engineering & design studio in Lucknow, India.`
+      `${titles[page]} from ${agency.name}, an independent digital engineering & design studio in India.`
     )
   }, [page])
 
@@ -497,7 +499,7 @@ export function AgencyPage({ page }) {
       <div className="wrap inner-hero">
         <Eyebrow>About {agency.name}</Eyebrow>
         <h1>Independent studio.<br /><em>Direct collaboration.</em></h1>
-        <p>{agency.name} is an independent digital design and engineering studio in Lucknow, India. We work directly with growing teams to plan and build websites, web apps, and practical AI automations.</p>
+        <p>{agency.name} is an independent digital design and engineering studio in India. We work directly with growing teams to plan and build websites, web apps, and practical AI automations.</p>
       </div>
       <section className="about-feature wrap">
         <img src="/previews/urbannest.png" alt="UrbanNest home-services concept website preview" loading="lazy" />
@@ -511,9 +513,9 @@ export function AgencyPage({ page }) {
       </section>
       <section className="wrap values-grid">
         {[
-          ['Kriya (Intentional Action)', 'We start by understanding the people, market realities, and growth opportunities around your project.'],
+          ['Elevate with intent', 'We start by understanding the people, market realities, and growth opportunities around your project.'],
           ['Engineering Craft', 'From 60fps animations to sub-second page loads, we care about the technical details that make products feel effortless.'],
-          ['True Partnership', 'Based in Lucknow and working across timezones, we collaborate with honest conversations and shared ownership.']
+          ['True Partnership', 'Based in India and working across timezones, we collaborate with honest conversations and shared ownership.']
         ].map(([title, desc], i) => (
           <Reveal key={title} delay={i * 0.08}>
             <article>
@@ -564,12 +566,12 @@ export function AgencyPage({ page }) {
           button="Open email draft"
           mode="mailto"
           recipient={agency.email}
-          subject="Project enquiry — Kriya Labs"
+          subject="Project enquiry — elev8rix"
           fields={[
             { name: 'name', label: 'Your name' },
             { name: 'email', label: 'Email address', type: 'email' },
-            { name: 'phone', label: 'Phone / WhatsApp (+91)', type: 'tel', placeholder: '+91 70078 64516', required: false },
-            { name: 'business', label: 'Company / Brand name', required: false },
+            { name: 'phone', label: 'Phone / WhatsApp', type: 'tel', placeholder: '70078 64516', required: false },
+            { name: 'business', label: 'Your company', required: false },
             { name: 'service', label: 'Service required', options: ['Website design & development', 'Web application', 'Mobile application', 'AI automation', 'E-commerce', 'UI/UX design', 'API integration', 'Website optimization', 'Something else'], required: false },
             { name: 'budget', label: `Estimated budget (${currency})`, options: budgetOptions, required: false },
             { name: 'description', label: 'Tell us about your project', wide: true, required: false, placeholder: 'Goals, timeline, or links you would like to share…', multiline: true }

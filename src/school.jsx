@@ -50,7 +50,7 @@ export function SchoolLayout() {
 export function SchoolPage({ page }) {
   useEffect(() => {
     const titles = { home: 'Learn with curiosity', about: 'Our school', academics: 'Learning at every stage', admissions: 'Admissions 2026–27', contact: 'Contact our campus' }
-    updatePageMeta(`${titles[page]} — Northfield International Academy`, `${titles[page]} at Northfield International Academy, a K–12 school concept in Gomti Nagar, Lucknow crafted by Kriya Labs.`)
+    updatePageMeta(`${titles[page]} — Northfield International Academy`, `${titles[page]} at Northfield International Academy, a K–12 school concept in Gomti Nagar, Lucknow crafted by elev8rix.`)
   }, [page])
 
   if (page === 'home') return (
@@ -162,7 +162,7 @@ export function SchoolPage({ page }) {
         <div>
           <Eyebrow>Our story</Eyebrow>
           <h2>Growing together,<br /><span>every day.</span></h2>
-          <p>Northfield International Academy is an interactive school concept designed by Kriya Labs around a simple belief: young people learn best when they feel safe enough to ask questions and supported enough to take thoughtful risks.</p>
+          <p>Northfield International Academy is an interactive school concept designed by elev8rix around a simple belief: young people learn best when they feel safe enough to ask questions and supported enough to take thoughtful risks.</p>
           <p>Our community brings together students, families, and educators across Lucknow who care about character as much as academic excellence.</p>
         </div>
       </section>
@@ -257,7 +257,7 @@ export function SchoolPage({ page }) {
               <p>Birth certificate, previous school report cards, Aadhaar / ID copy, and passport-size photographs as your application progresses.</p>
             </div>
           </div>
-          <p className="school-demo-note">This is an interactive education concept built by Kriya Labs. No real admissions status is represented.</p>
+          <p className="school-demo-note">This is an interactive education concept built by elev8rix. No real admissions status is represented.</p>
         </div>
         <DemoForm title="Ask our admissions team" button="Send admissions enquiry" storage="northfield-admissions" fields={formFields} />
       </section>

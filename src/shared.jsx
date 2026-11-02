@@ -9,7 +9,7 @@ import { agency, saveDemo } from './config.js'
 function detectRegionalCurrency() {
   if (typeof window === 'undefined') return 'INR'
   try {
-    const cached = sessionStorage.getItem('kriya_region_currency')
+    const cached = sessionStorage.getItem('elev8rix_region_currency')
     if (cached === 'INR' || cached === 'USD') return cached
 
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''
@@ -39,20 +39,20 @@ export function useCurrency() {
     window.addEventListener('region-currency-resolved', onRegionUpdate)
 
     // Verify via lightweight IP country lookup once per session if not yet cached
-    if (!sessionStorage.getItem('kriya_region_currency')) {
+    if (!sessionStorage.getItem('elev8rix_region_currency')) {
       fetch('https://api.country.is/')
         .then(r => (r.ok ? r.json() : null))
         .then(data => {
           if (data && data.country) {
             const resolved = data.country === 'IN' ? 'INR' : 'USD'
-            sessionStorage.setItem('kriya_region_currency', resolved)
+            sessionStorage.setItem('elev8rix_region_currency', resolved)
             setCurrencyState(resolved)
             window.dispatchEvent(new CustomEvent('region-currency-resolved', { detail: resolved }))
           }
         })
         .catch(() => {
           // Offline or blocked: keep timezone/locale detection
-          sessionStorage.setItem('kriya_region_currency', detectRegionalCurrency())
+          sessionStorage.setItem('elev8rix_region_currency', detectRegionalCurrency())
         })
     }
 
@@ -70,8 +70,8 @@ export function WhatsAppFloat() {
       target="_blank"
       rel="noreferrer"
       className="whatsapp-float"
-      aria-label="Chat with Kriya Labs on WhatsApp"
-      title="Chat on WhatsApp (+91)"
+      aria-label="Chat with elev8rix on WhatsApp"
+      title="Chat on WhatsApp"
     >
       <MessageCircle size={20} />
       <span>WhatsApp</span>
@@ -100,10 +100,22 @@ export function ThemeToggle() {
     localStorage.setItem('theme', theme)
   }, [theme])
 
+  useEffect(() => {
+    const syncTheme = (event) => setTheme(event.detail)
+    window.addEventListener('elev8rix-theme-change', syncTheme)
+    return () => window.removeEventListener('elev8rix-theme-change', syncTheme)
+  }, [])
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    window.dispatchEvent(new CustomEvent('elev8rix-theme-change', { detail: next }))
+  }
+
   return (
     <button
       type="button"
-      onClick={() => setTheme(t => (t === 'dark' ? 'light' : 'dark'))}
+      onClick={toggleTheme}
       className="theme-toggle"
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
       title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
@@ -512,7 +524,7 @@ export function CtaLink({ to, children, secondary = false }) {
 export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backTo = '/' }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const isDemo = ['cafe', 'school', 'business'].includes(theme)
+  const isDemo = ['cafe', 'school', 'business', 'fitness', 'legal'].includes(theme)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -531,9 +543,9 @@ export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backT
       <header className={`site-nav${scrolled ? ' scrolled' : ''}`}>
         <div className="nav-inner">
           <Link className="brand" to={backTo} onClick={() => setOpen(false)}>
-            <span className="brand-mark">{brand.mark || brand.name?.slice(0, 1)}</span>
+            <BrandMark brand={brand} />
             <span>
-              {brand.name}
+              <AgencyWordmark brand={brand} />
               {brand.sub && <small>{brand.sub}</small>}
             </span>
           </Link>
@@ -546,7 +558,7 @@ export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backT
             {isDemo && (
               <Link className="studio-return" to="/" onClick={() => setOpen(false)}>
                 <ArrowUpLeft size={13} />
-                Kriya Labs
+                elev8rix
               </Link>
             )}
             <ThemeToggle />
@@ -596,7 +608,7 @@ export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backT
                 transition={{ delay: links.length * 0.05, duration: 0.28 }}
               >
                 <Link className="studio-return" to="/" onClick={() => setOpen(false)}>
-                  <ArrowUpLeft size={14} /> Agency home
+                  <ArrowUpLeft size={14} /> elev8rix studio
                 </Link>
               </motion.div>
             )}
@@ -649,8 +661,8 @@ export function SiteFooter({ brand, links, note, home = '/' }) {
         <div className="footer-top">
           <div className="footer-brand">
             <Link className="brand" to={home}>
-              <span className="brand-mark">{brand.mark || brand.name?.slice(0, 1)}</span>
-              <span>{brand.name}</span>
+              <BrandMark brand={brand} />
+              <AgencyWordmark brand={brand} />
             </Link>
             <p>{note}</p>
           </div>
@@ -672,11 +684,23 @@ export function SiteFooter({ brand, links, note, home = '/' }) {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} {brand.name} · Crafted in Lucknow, India</span>
-          <span>Kriya Labs · Interactive Portfolio</span>
+          <span>© {new Date().getFullYear()} {brand.name} · Crafted in India</span>
+          <span>elev8rix · Interactive Portfolio</span>
         </div>
       </div>
       <WhatsAppFloat />
     </footer>
   )
+}
+
+function BrandMark({ brand }) {
+  return brand.name === agency.name
+    ? <span className="brand-mark elev8rix-mark"><img src="/elev8rix-symbol.svg" alt="" /></span>
+    : <span className="brand-mark">{brand.mark || brand.name?.slice(0, 1)}</span>
+}
+
+function AgencyWordmark({ brand }) {
+  return brand.name === agency.name
+    ? <span className="agency-wordmark">elev<span>8</span>rix</span>
+    : <span>{brand.name}</span>
 }

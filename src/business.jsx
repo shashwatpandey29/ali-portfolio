@@ -59,7 +59,7 @@ export function BusinessLayout() {
 export function BusinessPage({ page }) {
   useEffect(() => {
     const titles = { home: 'A better home starts here', services: 'Home & interior services', about: 'Our approach', book: 'Request a free site visit', contact: 'Contact UrbanNest Lucknow' }
-    updatePageMeta(`${titles[page]} — UrbanNest Services`, `${titles[page]} from UrbanNest, a home renovation and property care concept in Lucknow crafted by Kriya Labs.`)
+    updatePageMeta(`${titles[page]} — UrbanNest Services`, `${titles[page]} from UrbanNest, a home renovation and property care concept in Lucknow crafted by elev8rix.`)
   }, [page])
 
   if (page === 'home') return (
@@ -142,7 +142,7 @@ export function BusinessPage({ page }) {
         <div>
           <Eyebrow>A neighbourly note</Eyebrow>
           <h2>Good work starts<br /><em>with listening.</em></h2>
-          <p>UrbanNest is an interactive local service concept crafted by Kriya Labs to showcase high-converting lead generation and trust-building design.</p>
+          <p>UrbanNest is an interactive local service concept crafted by elev8rix to showcase high-converting lead generation and trust-building design.</p>
         </div>
         <div className="quote-placeholder">
           <span>Illustrative client feedback</span>
@@ -183,7 +183,7 @@ export function BusinessPage({ page }) {
         <div>
           <Eyebrow>Our approach</Eyebrow>
           <h2>Make the work<br /><em>feel workable.</em></h2>
-          <p>UrbanNest is a property services concept engineered by Kriya Labs around customer trust. It starts with listening well, explaining material choices clearly, and respecting your home at every step.</p>
+          <p>UrbanNest is a property services concept engineered by elev8rix around customer trust. It starts with listening well, explaining material choices clearly, and respecting your home at every step.</p>
           <p>From waterproofing a terrace before monsoon to designing a modular kitchen, the experience leaves you feeling looked after.</p>
           <ArrowLink to={`${base}/services`}>See what we can help with</ArrowLink>
         </div>
@@ -229,7 +229,7 @@ export function BusinessPage({ page }) {
         <div className="quote-side">
           <img src={img('photo-1600566753086-00f18fb6b3ea', 750)} alt="Home interior ready for thoughtful improvements" />
           <h3>What happens next?</h3>
-          <p>This interactive concept form by Kriya Labs saves your request locally in your browser so you can test the lead flow.</p>
+          <p>This interactive concept form by elev8rix saves your request locally in your browser so you can test the lead flow.</p>
           <div><Check size={16} /> Transparent itemized estimates</div>
           <div><Check size={16} /> Dedicated Lucknow site supervisor</div>
         </div>
@@ -254,7 +254,7 @@ export function BusinessPage({ page }) {
           <p><a href="tel:+919876543210">+91 98765 43210</a><br /><a href="mailto:care@urbannest.in">care@urbannest.in</a></p>
           <a className="map-link" href="https://maps.google.com/?q=Lucknow+Uttar+Pradesh" target="_blank" rel="noreferrer">Service area map <ArrowRight size={15} /></a>
           <a className="whatsapp-link" href="https://wa.me/919876543210" target="_blank" rel="noreferrer">Chat on WhatsApp <ArrowRight size={15} /></a>
-          <p className="business-disclaimer">Interactive concept crafted by Kriya Labs · Contact details are illustrative.</p>
+          <p className="business-disclaimer">Interactive concept crafted by elev8rix · Contact details are illustrative.</p>
         </div>
         <DemoForm
           title="Send us a note"

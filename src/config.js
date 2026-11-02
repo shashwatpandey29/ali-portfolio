@@ -1,12 +1,12 @@
 export const agency = {
-  name: 'Kriya Labs',
-  mark: 'K.',
-  tagline: 'Next-generation digital engineering & design studio',
-  email: 'hello@kriyalabs.in',
-  phone: '+91 70078 64516',
+  name: 'elev8rix',
+  mark: 'e8.',
+  tagline: 'Digital experiences that elevate your business',
+  email: 'elev8rix@gmail.com',
+  phone: '70078 64516',
   whatsapp: 'https://wa.me/917007864516',
   linkedin: 'https://www.linkedin.com/',
-  location: 'Lucknow, India · Working Worldwide',
+  location: 'India',
   services: [
     'Website design & development',
     'Web applications',
@@ -46,6 +46,24 @@ export const concepts = [
     tags: ['Home services', 'Interiors', 'Lead generation'],
     preview: '/previews/urbannest.png',
     tone: 'business',
+  },
+  {
+    slug: 'fitness',
+    name: 'Forge Athletics',
+    category: 'Fitness & wellness',
+    description: 'A high-energy training club experience that turns first visits into confident starts, with clear programs, coaches, and trial bookings.',
+    tags: ['Fitness', 'Class schedule', 'Trial booking'],
+    preview: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=85',
+    tone: 'fitness',
+  },
+  {
+    slug: 'legal',
+    name: 'Alder & Rowe',
+    category: 'Legal services',
+    description: 'A calm, editorial law firm concept that makes practice areas, people, and the first consultation feel clear and approachable.',
+    tags: ['Law firm', 'Practice areas', 'Consultation'],
+    preview: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=85',
+    tone: 'legal',
   },
 ]
 
