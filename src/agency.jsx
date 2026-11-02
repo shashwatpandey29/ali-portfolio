@@ -7,7 +7,7 @@ import { agencyServices as services } from './data/services.js'
 import {
   ArrowLink, CtaLink, DemoForm, Eyebrow, PageTransition, Reveal,
   ScrollProgress, SiteFooter, SiteNav, updatePageMeta,
-  GradientOrb, CustomCursor, SmoothScrollProvider, useCurrency
+  GradientOrb, CustomCursor, SmoothScrollProvider, StaggerContainer, StaggerItem, useCurrency
 } from './shared.jsx'
 
 const nav = [['Home', '/'], ['Services', '/services'], ['Our work', '/work'], ['About', '/about'], ['Contact', '/contact']]
