@@ -5,7 +5,7 @@ export const agencyServices = [
     'Website design & development',
     'Distinctive, fast websites that turn a first impression into a lasting one.',
     Globe2,
-    ['Next.js & React', '3D WebGL & Motion', 'Headless CMS', '99+ Lighthouse Score'],
+    ['Next.js & React', '3D WebGL & Motion', 'Headless CMS', 'Performance budgets & Core Web Vitals'],
     '2–4 weeks',
     { INR: 'From ₹45,000', USD: 'From $950' }
   ],

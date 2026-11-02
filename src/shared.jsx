@@ -425,15 +425,23 @@ export function GradientOrb({ color = 'electric', size = 400, top, left, right, 
 }
 
 /* ─── Demo Form ──────────────────────────────────────── */
-export function DemoForm({ title = 'Send an enquiry', button = 'Send enquiry', fields = [], storage = 'demo-submissions' }) {
+export function DemoForm({ title = 'Send an enquiry', button = 'Send enquiry', fields = [], storage = 'demo-submissions', mode = 'demo', recipient = '', subject = 'Project enquiry' }) {
   const [sent, setSent] = useState(false)
   const [busy, setBusy] = useState(false)
 
   function submit(e) {
     e.preventDefault()
     if (busy) return
-    setBusy(true)
     const data = Object.fromEntries(new FormData(e.currentTarget))
+    if (mode === 'mailto') {
+      const body = fields.map(field => `${field.label}: ${data[field.name] || 'Not provided'}`).join('\n')
+      const mailto = `mailto:${recipient}?subject=${encodeURIComponent(`${subject}${data.business ? ` — ${data.business}` : ''}`)}&body=${encodeURIComponent(body)}`
+      setSent(true)
+      window.location.href = mailto
+      return
+    }
+
+    setBusy(true)
     saveDemo(storage, data)
     setSent(true)
     setBusy(false)
@@ -443,8 +451,10 @@ export function DemoForm({ title = 'Send an enquiry', button = 'Send enquiry', f
     <div className="form-success" role="status">
       <span className="success-icon"><Check size={20} /></span>
       <div>
-        <strong>Thank you — we've got your details.</strong>
-        <p>This is a concept website. Your information was saved only in this browser; nothing was sent to a business.</p>
+        <strong>{mode === 'mailto' ? 'Your email draft is ready.' : "Thank you — we've got your details."}</strong>
+        <p>{mode === 'mailto'
+          ? <>Review the message and press Send in your email app. If no draft opened, email <a href={`mailto:${recipient}`}>{recipient}</a>.</>
+          : 'This is a concept website. Your information was saved only in this browser; nothing was sent to a business.'}</p>
       </div>
     </div>
   )
@@ -472,7 +482,9 @@ export function DemoForm({ title = 'Send an enquiry', button = 'Send enquiry', f
         {busy ? 'Saving…' : button}
         <ArrowRight size={16} />
       </button>
-      <p className="form-note">Demo form only · No real request will be sent.</p>
+      <p className="form-note">{mode === 'mailto'
+        ? <>Opens a prefilled email to <a href={`mailto:${recipient}`}>{recipient}</a>. Nothing is sent until you press Send.</>
+        : 'Demo form only · No real request will be sent.'}</p>
     </form>
   )
 }
@@ -497,7 +509,7 @@ export function CtaLink({ to, children, secondary = false }) {
 }
 
 /* ─── Site Nav ───────────────────────────────────────── */
-export function SiteNav({ brand, links, cta, theme = 'generic', backTo = '/' }) {
+export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backTo = '/' }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const isDemo = ['cafe', 'school', 'business'].includes(theme)
@@ -605,8 +617,12 @@ export function SiteNav({ brand, links, cta, theme = 'generic', backTo = '/' }) 
       </AnimatePresence>
 
       {/* Mobile Floating Bottom Dock */}
-      <nav className="mobile-bottom-dock" aria-label="Mobile quick navigation">
-        {links.slice(0, 5).map(([name, to]) => {
+      <nav className="mobile-bottom-dock" aria-label={mobileCta ? 'Project enquiry' : 'Mobile quick navigation'}>
+        {mobileCta ? (
+          <Link className="mobile-dock-cta" to={mobileCta[1]} onClick={() => setOpen(false)}>
+            {mobileCta[0]} <ArrowRight size={16} />
+          </Link>
+        ) : links.slice(0, 5).map(([name, to]) => {
           const lower = name.toLowerCase()
           const Icon = lower.includes('home') ? Home
             : lower.includes('service') || lower.includes('menu') || lower.includes('academic') ? Layers

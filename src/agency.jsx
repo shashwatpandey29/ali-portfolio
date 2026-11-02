@@ -6,7 +6,7 @@ import { agency, concepts, img } from './config.js'
 import { agencyServices as services } from './data/services.js'
 import {
   ArrowLink, CtaLink, DemoForm, Eyebrow, PageTransition, Reveal,
-  ScrollProgress, StaggerContainer, StaggerItem, SiteFooter, SiteNav, updatePageMeta,
+  ScrollProgress, SiteFooter, SiteNav, updatePageMeta,
   GradientOrb, CustomCursor, SmoothScrollProvider, useCurrency
 } from './shared.jsx'
 
@@ -21,13 +21,14 @@ export function AgencyLayout() {
         <CustomCursor />
         <ScrollProgress />
         <div className="concept-ribbon">
-          <span><Asterisk size={12} /> {agency.name} · {agency.location} · Available for select Q4/Q1 projects</span>
+          <span><Asterisk size={12} /> {agency.name} · Lucknow, India · Working worldwide</span>
           <Link to="/contact">Start a conversation <ArrowRight size={12} /></Link>
         </div>
         <SiteNav
           brand={{ name: agency.name, mark: agency.mark, sub: 'LUCKNOW · INDIA' }}
           links={nav}
           cta={["Let's talk", '/contact']}
+          mobileCta={['Talk through a project', '/contact']}
           backTo="/"
         />
         <PageTransition />
@@ -74,22 +75,22 @@ function HeroSection() {
           </motion.div>
 
           <motion.h1 custom={0.08} initial="hidden" animate="visible" variants={fade}>
-            Digital craft<br />
-            with <em>purpose.</em>
+            Make digital<br />
+            work <em>harder.</em>
           </motion.h1>
 
           <motion.p className="hero-lead" custom={0.16} initial="hidden" animate="visible" variants={fade}>
-            From Lucknow to the world—we design and engineer high-velocity websites, full-stack web apps, and AI automations that move ambitious businesses forward.
+            For growing businesses, Kriya Labs designs and builds websites, web apps, and practical AI automations around your customers, goals, and day-to-day work.
           </motion.p>
 
           <motion.div className="hero-actions" custom={0.24} initial="hidden" animate="visible" variants={fade}>
-            <CtaLink to="/contact">Start a project</CtaLink>
-            <ArrowLink to="/work">Explore our work</ArrowLink>
+            <CtaLink to="/contact">Talk through a project</CtaLink>
+            <ArrowLink to="/work">Explore concept work</ArrowLink>
           </motion.div>
 
           <motion.div className="hero-caption" custom={0.35} initial="hidden" animate="visible" variants={fade}>
             <span className="caption-line" />
-            <span>Crafted in Lucknow, India · Engineered for global scale.</span>
+            <span>Strategy, design &amp; engineering · Lucknow, India</span>
           </motion.div>
         </div>
 
@@ -101,13 +102,14 @@ function HeroSection() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="hero-card">
+            <Link className="hero-card hero-card-link" to="/projects/cafe" aria-label="Explore the Maison Ember hospitality concept">
               <img src={img('photo-1414235077428-338989a2e8c0', 900)} alt="Warmly lit restaurant" />
               <div className="hero-card-label">
-                <span>01 / Hospitality</span>
+                <span>01 / Concept · Hospitality</span>
                 <b>Maison Ember</b>
+                <small>Explore live concept <ArrowRight size={12} /></small>
               </div>
-            </div>
+            </Link>
           </motion.div>
 
           <motion.div
@@ -116,13 +118,14 @@ function HeroSection() {
             animate={{ opacity: 1, x: 0, y: 0 }}
             transition={{ duration: 0.65, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="hero-card hero-card-bordered">
+            <Link className="hero-card hero-card-bordered hero-card-link" to="/projects/school" aria-label="Explore the Northfield education concept">
               <img src={img('photo-1509062522246-3755977927d7', 500)} alt="Students collaborating" />
               <div className="hero-card-label">
-                <span>02 / Education</span>
-                <b>Northfield</b>
+                <span>02 / Concept · Education</span>
+                <b>Northfield International</b>
+                <small>Explore live concept <ArrowRight size={12} /></small>
               </div>
-            </div>
+            </Link>
           </motion.div>
 
           <motion.div
@@ -145,8 +148,8 @@ function HeroSection() {
 export function AgencyHome() {
   useEffect(() => {
     updatePageMeta(
-      `${agency.name} — Next-gen Digital Engineering & Design Studio (Lucknow, India)`,
-      'Kriya Labs brings strategy, design, and full-stack engineering together in Lucknow, India to build next-generation websites, products, and AI automations.'
+      `${agency.name} — Websites, Apps & AI Automation`,
+      'Kriya Labs is a digital design and engineering studio in Lucknow, India, building websites, web apps, and practical AI automations for growing businesses.'
     )
   }, [])
 
@@ -156,7 +159,7 @@ export function AgencyHome() {
 
       {/* Ticker */}
       <div className="ticker">
-        <div className="ticker-track">
+        <div className="ticker-track" aria-hidden="true">
           {['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation', 'Mobile Apps', 'E-Commerce', 'Lucknow · India', 'Global Delivery'].map((x, i) => (
             <span key={i} style={{ padding: '0 28px', display: 'inline-flex', alignItems: 'center', gap: 28 }}>
               {x} <span style={{ color: 'var(--electric)', fontSize: 16 }}>✦</span>
@@ -182,7 +185,7 @@ export function AgencyHome() {
           <Reveal delay={0.08}>
             <div>
               <p className="section-lead">
-                "Kriya" means intentional, creative action. At Kriya Labs, we pair deep engineering rigor with modern Indian craftsmanship—building digital products that look extraordinary and perform without compromise.
+                "Kriya" means intentional, creative action. We bring strategy, design, and engineering together to make useful digital experiences for customers and the teams who serve them.
               </p>
               <ArrowLink to="/about">Get to know Kriya Labs</ArrowLink>
             </div>
@@ -220,7 +223,7 @@ function ServicesPreview() {
             <Eyebrow>Services we provide</Eyebrow>
             <h2 className="section-h2">Digital, end to <em>end.</em></h2>
           </div>
-          <p>Tap or hover any discipline to explore our deliverables, architecture, transparent {currency} pricing, and typical delivery timelines.</p>
+          <p>Explore deliverables and indicative {currency} starting prices. Final scope and schedule are confirmed after discovery.</p>
         </div>
 
         {/* Interactive Showcase Panel (Great on Mobile & Desktop) */}
@@ -287,40 +290,6 @@ function ServicesPreview() {
           </AnimatePresence>
         </div>
 
-        {/* Full Bento Grid of All Services */}
-        <StaggerContainer className="bento-grid">
-          {services.slice(0, 6).map(([name, desc, Icon, deliverables = [], timeline = '2–4 weeks', price = {}], i) => (
-            <StaggerItem key={name}>
-              <Link
-                className={`bento-tile${i === 0 ? ' featured' : ''}${i === activeIdx ? ' is-selected' : ''}`}
-                to="/services"
-                onMouseEnter={() => setActiveIdx(i)}
-                onMouseMove={e => {
-                  const rect = e.currentTarget.getBoundingClientRect()
-                  e.currentTarget.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`)
-                  e.currentTarget.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`)
-                }}
-              >
-                <div className="tile-header">
-                  <span className="tile-num">0{i + 1}</span>
-                  <span className="tile-time">{price[currency] || timeline}</span>
-                  <div className="tile-icon-wrap">
-                    <Icon size={20} className="tile-icon" strokeWidth={1.6} />
-                  </div>
-                </div>
-                <h3>{name}</h3>
-                <p>{desc}</p>
-                <div className="tile-tags">
-                  {deliverables.slice(0, 3).map(tag => (
-                    <span key={tag}>{tag}</span>
-                  ))}
-                </div>
-                <span className="tile-arrow"><MoveUpRight size={16} /></span>
-              </Link>
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
-
         <div className="center-link">
           <ArrowLink to="/services">Explore all {services.length} capabilities &amp; {currency} packages</ArrowLink>
         </div>
@@ -340,7 +309,7 @@ function WorkPreview() {
             <Eyebrow>Selected concepts</Eyebrow>
             <h2 className="section-h2">Different stories.<br /><em>Made tangible.</em></h2>
           </div>
-          <p>Three interactive concept projects built by {agency.name} showing how tailored digital experiences elevate hospitality, education, and local businesses.</p>
+          <p>Three self-initiated concepts showing how tailored digital experiences can support hospitality, education, and home-service businesses.</p>
         </div>
 
         <div className="project-grid">
@@ -356,9 +325,9 @@ function WorkPreview() {
             >
               <Link to={`/projects/${p.slug}`} className="project-card">
                 <div className="project-photo">
-                  <img src={img(p.image, 1100)} alt={`${p.name} concept website preview`} loading="lazy" />
+                  <img src={p.preview} alt={`${p.name} concept website preview`} loading="lazy" />
                   <div className="project-overlay" />
-                  <span className="concept-tag">Interactive live demo</span>
+                  <span className="concept-tag">Concept project · Live demo</span>
                   <span className="project-number">0{i + 1}</span>
                   <span className="project-open"><MoveUpRight size={18} /></span>
                 </div>
@@ -380,7 +349,7 @@ function WorkPreview() {
 
         <p className="concept-disclaimer">
           <Asterisk size={13} />
-          Click any card above to launch a full multi-page interactive prototype engineered by {agency.name}.
+          These self-initiated concepts are prototypes, not commissioned client work. Open any card to explore the full experience.
         </p>
       </div>
     </section>
@@ -527,11 +496,11 @@ export function AgencyPage({ page }) {
     <main className="inner-page">
       <div className="wrap inner-hero">
         <Eyebrow>About {agency.name}</Eyebrow>
-        <h1>Thoughtful people.<br /><em>Useful outcomes.</em></h1>
-        <p>{agency.name} is an independent digital engineering and design studio based in Lucknow, India, partnering with ambitious founders and teams worldwide.</p>
+        <h1>Independent studio.<br /><em>Direct collaboration.</em></h1>
+        <p>{agency.name} is an independent digital design and engineering studio in Lucknow, India. We work directly with growing teams to plan and build websites, web apps, and practical AI automations.</p>
       </div>
       <section className="about-feature wrap">
-        <img src={img('photo-1521737711867-e3b97375f902', 1200)} alt="Creative engineering team collaborating" loading="lazy" />
+        <img src="/previews/urbannest.png" alt="UrbanNest home-services concept website preview" loading="lazy" />
         <Reveal>
           <div>
             <Eyebrow>How we work</Eyebrow>
@@ -592,8 +561,10 @@ export function AgencyPage({ page }) {
         </div>
         <DemoForm
           title={`Project enquiry (${currency})`}
-          button="Send project enquiry"
-          storage="kriya-labs-inquiries"
+          button="Open email draft"
+          mode="mailto"
+          recipient={agency.email}
+          subject="Project enquiry — Kriya Labs"
           fields={[
             { name: 'name', label: 'Your name' },
             { name: 'email', label: 'Email address', type: 'email' },

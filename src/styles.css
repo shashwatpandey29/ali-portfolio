@@ -719,10 +719,13 @@ html.light .orb {
   border: 1px solid var(--border);
   box-shadow: 0 24px 60px rgba(0,0,0,0.28);
 }
+.hero-card-link { display: block; color: inherit; text-decoration: none; }
+.hero-card-link:focus-visible { outline: 3px solid var(--electric); outline-offset: 4px; }
 .hero-card-bordered {
   border: 5px solid var(--void);
 }
-.hero-card img { width: 100%; height: 100%; }
+.hero-card img { width: 100%; height: 100%; transition: transform 0.45s ease; }
+.hero-card-link:hover img { transform: scale(1.035); }
 .hero-card-label {
   position: absolute;
   inset: 0;
@@ -742,6 +745,15 @@ html.light .orb {
   font: 500 20px var(--font-serif);
   color: #f8fafc;
   margin-top: 4px;
+}
+.hero-card-label small {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  color: rgba(248,250,252,0.82);
+  font-size: 10px;
+  font-weight: 600;
 }
 .hero-badge {
   position: absolute;
@@ -1918,6 +1930,21 @@ html.dark .business-services .section-heading h2 em { color: #f0855a; }
 .mobile-bottom-dock {
   display: none;
 }
+.mobile-dock-cta {
+  width: 100%;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--glow), var(--electric));
+  box-shadow: 0 8px 24px rgba(99,102,241,0.28);
+}
+.mobile-dock-cta:focus-visible { outline: 3px solid var(--text-1); outline-offset: 3px; }
 
 /* ─── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width: 1024px) {
@@ -1986,6 +2013,19 @@ html.dark .business-services .section-heading h2 em { color: #f0855a; }
     z-index: 4990;
     padding: 0 6px;
   }
+  .agency-theme .mobile-bottom-dock {
+    height: auto;
+    left: 16px;
+    right: 16px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0;
+  }
+  .agency-theme .whatsapp-float { display: none; }
   .dock-item {
     display: flex;
     flex-direction: column;
@@ -2169,4 +2209,9 @@ html.dark .business-services .section-heading h2 em { color: #f0855a; }
   .business-story > img { height: 240px; }
   .business-form-page { grid-template-columns: 1fr; gap: 24px; }
   .team-note h2 { font-size: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+  .hero-card img { transition: none; }
 }
