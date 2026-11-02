@@ -1,43 +1,610 @@
-import { useEffect } from 'react'
-import { Outlet, Link } from 'react-router-dom'
-import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Asterisk, MessageCircle, MoveUpRight } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { ArrowRight, Asterisk, Check, Clock, MapPin, MessageCircle, MoveUpRight, Phone, Sparkles } from 'lucide-react'
 import { agency, concepts, img } from './config.js'
 import { agencyServices as services } from './data/services.js'
-import { ArrowLink, CtaLink, DemoForm, Eyebrow, PageTransition, Reveal, ScrollProgress, SiteFooter, SiteNav, updatePageMeta } from './shared.jsx'
+import {
+  ArrowLink, CtaLink, DemoForm, Eyebrow, PageTransition, Reveal,
+  ScrollProgress, StaggerContainer, StaggerItem, SiteFooter, SiteNav, updatePageMeta,
+  GradientOrb, CustomCursor, SmoothScrollProvider, useCurrency
+} from './shared.jsx'
 
 const nav = [['Home', '/'], ['Services', '/services'], ['Our work', '/work'], ['About', '/about'], ['Contact', '/contact']]
 const projects = concepts
-const fade = { hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: .55 } } }
 
+/* ─────────────────────────────────────────────────────── */
 export function AgencyLayout() {
-  return <div className="agency-theme"><ScrollProgress /><div className="concept-ribbon"><span><Asterisk size={13} /> Independent digital studio · Available for select projects</span><Link to="/contact">Let’s make something useful <ArrowRight size={13} /></Link></div><SiteNav brand={{ name: agency.name, mark: 'f.' }} links={nav} cta={['Let’s talk', '/contact']} backTo="/" /><PageTransition /><SiteFooter brand={{ name: agency.name, mark: 'f.' }} note="An independent digital studio making thoughtful things for the web." links={[["Services", "/services"], ["Selected work", "/work"], ["About", "/about"], ["Contact", "/contact"], ["Maison Ember demo", "/projects/cafe"], ["Northfield demo", "/projects/school"], ["UrbanNest demo", "/projects/business"], ["Email us", `mailto:${agency.email}`]]} /></div>
+  return (
+    <SmoothScrollProvider>
+      <div className="agency-theme">
+        <CustomCursor />
+        <ScrollProgress />
+        <div className="concept-ribbon">
+          <span><Asterisk size={12} /> {agency.name} · {agency.location} · Available for select Q4/Q1 projects</span>
+          <Link to="/contact">Start a conversation <ArrowRight size={12} /></Link>
+        </div>
+        <SiteNav
+          brand={{ name: agency.name, mark: agency.mark, sub: 'LUCKNOW · INDIA' }}
+          links={nav}
+          cta={["Let's talk", '/contact']}
+          backTo="/"
+        />
+        <PageTransition />
+        <SiteFooter
+          brand={{ name: agency.name, mark: agency.mark }}
+          note="An independent digital engineering & design studio in Lucknow, India, crafting next-generation websites, web apps, and AI systems for ambitious brands worldwide."
+          links={[
+            ['Services', '/services'],
+            ['Selected work', '/work'],
+            ['About Kriya Labs', '/about'],
+            ['Contact', '/contact'],
+            ['Maison Ember demo', '/projects/cafe'],
+            ['Northfield demo', '/projects/school'],
+            ['UrbanNest demo', '/projects/business'],
+            ['Email us', `mailto:${agency.email}`],
+          ]}
+        />
+      </div>
+    </SmoothScrollProvider>
+  )
 }
 
-export function AgencyHome() {
+/* ─── Hero ───────────────────────────────────────────── */
+function HeroSection() {
   const reduceMotion = useReducedMotion()
-  useEffect(() => { updatePageMeta('Form & Function — Independent digital studio', 'An independent digital studio bringing strategy, design, and engineering together to make thoughtful digital experiences.') }, [])
-  return <main>
-    <section className="agency-hero wrap"><div className="hero-copy"><Eyebrow>Good work, built together</Eyebrow><motion.h1 initial={reduceMotion ? false : 'hidden'} animate="visible" variants={fade}>Digital things<br />with <em>purpose.</em></motion.h1><p className="hero-lead">We design and build the websites, products, and systems that help ambitious businesses find their next.</p><div className="hero-actions"><CtaLink to="/contact">Start a project</CtaLink><ArrowLink to="/work">Explore our work</ArrowLink></div><div className="hero-caption"><span className="caption-line" /><span>Independent by design. Invested in the details.</span></div></div><div className="hero-art" aria-label="A collection of digital experiences"><div className="art-stamp"><span>Digital,</span><span>with intent.</span><Asterisk size={28} /></div><div className="art-image art-large"><img src={img('photo-1414235077428-338989a2e8c0', 900)} alt="Warmly lit contemporary restaurant dining room" /><div className="art-label"><span>01 / Hospitality</span><b>Maison Ember</b></div></div><div className="art-image art-small"><img src={img('photo-1509062522246-3755977927d7', 500)} alt="Students collaborating in a bright classroom" /><div className="art-label"><span>02 / Education</span></div></div><div className="art-note">A few different worlds.<br />One thoughtful approach.</div></div></section>
-    <section className="ticker"><div>Strategy <span>✳</span> Design <span>✳</span> Development <span>✳</span> Partnership <span>✳</span> Strategy <span>✳</span> Design <span>✳</span> Development <span>✳</span></div></section>
-    <section className="section wrap intro-section"><Reveal><div><Eyebrow>Small studio, broad perspective</Eyebrow><h2>Clarity first.<br /><em>Craft always.</em></h2></div></Reveal><Reveal><div className="intro-text"><p>Good digital work happens when strong ideas meet close collaboration. We bring strategy, design, and technology together to make experiences that feel considered—and work hard for the people behind them.</p><ArrowLink to="/about">Get to know us</ArrowLink></div></Reveal></section>
-    <ServicesPreview />
-    <WorkPreview />
-    <section className="process-section"><div className="wrap process-grid"><div><Eyebrow>A clear path forward</Eyebrow><h2>Thoughtful from<br /><em>first hello.</em></h2><p>Good outcomes come from asking better questions early, sharing work along the way, and staying curious through every detail.</p><CtaLink to="/contact" secondary>Talk through an idea</CtaLink></div><div className="process-list">{['Listen & discover', 'Shape the strategy', 'Design the experience', 'Build with care', 'Test & refine', 'Launch & learn'].map((x, i) => <div className="process-item" key={x}><span>0{i + 1}</span><b>{x}</b><ArrowRight size={16} /></div>)}</div></div></section>
-    <ContactCta />
-  </main>
+  const fade = {
+    hidden: { opacity: 0, y: reduceMotion ? 0 : 20 },
+    visible: (d = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: d } })
+  }
+
+  return (
+    <section className="agency-hero">
+      {/* Background layers */}
+      <div className="hero-bg" />
+      <div className="hero-grid-lines" />
+      <GradientOrb color="electric" size={600} top="-100px" left="-100px" opacity={0.35} />
+      <GradientOrb color="glow" size={500} top="100px" right="-80px" opacity={0.25} />
+      <GradientOrb color="lime" size={350} bottom="-80px" left="30%" opacity={0.15} />
+
+      <div className="hero-content wrap">
+        <div className="hero-copy">
+          <motion.div custom={0} initial="hidden" animate="visible" variants={fade}>
+            <Eyebrow>Kriya Labs · Creative Action &amp; Engineering</Eyebrow>
+          </motion.div>
+
+          <motion.h1 custom={0.08} initial="hidden" animate="visible" variants={fade}>
+            Digital craft<br />
+            with <em>purpose.</em>
+          </motion.h1>
+
+          <motion.p className="hero-lead" custom={0.16} initial="hidden" animate="visible" variants={fade}>
+            From Lucknow to the world—we design and engineer high-velocity websites, full-stack web apps, and AI automations that move ambitious businesses forward.
+          </motion.p>
+
+          <motion.div className="hero-actions" custom={0.24} initial="hidden" animate="visible" variants={fade}>
+            <CtaLink to="/contact">Start a project</CtaLink>
+            <ArrowLink to="/work">Explore our work</ArrowLink>
+          </motion.div>
+
+          <motion.div className="hero-caption" custom={0.35} initial="hidden" animate="visible" variants={fade}>
+            <span className="caption-line" />
+            <span>Crafted in Lucknow, India · Engineered for global scale.</span>
+          </motion.div>
+        </div>
+
+        {/* Hero art — floating card stack */}
+        <div className="hero-art" aria-label="A collection of digital experiences">
+          <motion.div
+            className="hero-card-main"
+            initial={{ opacity: 0, scale: 0.94, y: 24 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="hero-card">
+              <img src={img('photo-1414235077428-338989a2e8c0', 900)} alt="Warmly lit restaurant" />
+              <div className="hero-card-label">
+                <span>01 / Hospitality</span>
+                <b>Maison Ember</b>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="hero-card-sub"
+            initial={{ opacity: 0, x: -16, y: 16 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="hero-card hero-card-bordered">
+              <img src={img('photo-1509062522246-3755977927d7', 500)} alt="Students collaborating" />
+              <div className="hero-card-label">
+                <span>02 / Education</span>
+                <b>Northfield</b>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="hero-badge"
+            initial={{ opacity: 0, scale: 0.6, rotate: 0 }}
+            animate={{ opacity: 1, scale: 1, rotate: 12 }}
+            transition={{ duration: 0.6, delay: 0.55 }}
+          >
+            <Sparkles size={18} style={{ marginBottom: 4 }} />
+            <span style={{ fontSize: 9 }}>Kriya</span>
+            <span style={{ fontSize: 9 }}>Labs · IN</span>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
 }
 
-function ServicesPreview() { return <section className="section services-section"><div className="wrap"><div className="section-heading"><div><Eyebrow>What we bring</Eyebrow><h2>Digital, end to <em>end.</em></h2></div><p>From first sketch to final deployment, we bring the right mix of thinking and making to each challenge.</p></div><div className="service-grid">{services.slice(0, 4).map(([name, desc, Icon], i) => <Link className="service-tile" to="/services" key={name}><div className="service-top"><span>0{i + 1}</span><Icon size={23} strokeWidth={1.4} /></div><h3>{name}</h3><p>{desc}</p><span className="tile-arrow"><ArrowRight size={17} /></span></Link>)}</div><div className="center-link"><ArrowLink to="/services">See everything we do</ArrowLink></div></div></section> }
+/* ─── Agency Home ────────────────────────────────────── */
+export function AgencyHome() {
+  useEffect(() => {
+    updatePageMeta(
+      `${agency.name} — Next-gen Digital Engineering & Design Studio (Lucknow, India)`,
+      'Kriya Labs brings strategy, design, and full-stack engineering together in Lucknow, India to build next-generation websites, products, and AI automations.'
+    )
+  }, [])
 
-function WorkPreview() { const reduceMotion = useReducedMotion(); return <section className="section work-section"><div className="wrap"><div className="section-heading"><div><Eyebrow>Selected concepts</Eyebrow><h2>Different stories.<br /><em>Made tangible.</em></h2></div><p>Three interactive concept projects show how the right digital experience can meet very different needs.</p></div><div className="project-grid">{projects.map((p, i) => <motion.div key={p.slug} className={`project-motion project-${i + 1}`} initial={reduceMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.16 }} whileHover={reduceMotion ? undefined : { y: -5 }} transition={{ type: 'spring', stiffness: 270, damping: 22, delay: reduceMotion ? 0 : i * 0.06 }}><Link to={`/projects/${p.slug}`} className="project-card"><div className="project-photo"><img src={img(p.image, 1000)} alt={`${p.name} concept website preview`} loading="lazy" /><span className="concept-tag">Interactive concept</span><span className="project-number">0{i + 1}</span><span className="project-open"><MoveUpRight size={20} /></span></div><div className="project-info"><div><span className="project-category">{p.category}</span><h3>{p.name}</h3><p>{p.description}</p></div><ArrowRight size={19} /></div><div className="tag-row">{p.tags.map(tag => <span key={tag}>{tag}</span>)}</div></Link></motion.div>)}</div><p className="concept-disclaimer"><Asterisk size={14} /> These are interactive concept projects created to demonstrate our approach, not client engagements.</p></div></section> }
+  return (
+    <main>
+      <HeroSection />
 
-function ContactCta() { return <section className="contact-cta"><div className="wrap cta-content"><Eyebrow>Good things start with a conversation</Eyebrow><h2>Have a knotty<br />idea? <em>We’re in.</em></h2><p>Tell us what you’re trying to make possible. We’ll take it from there, together.</p><CtaLink to="/contact" secondary>Tell us about it</CtaLink><span className="cta-scribble">✳</span></div></section> }
+      {/* Ticker */}
+      <div className="ticker">
+        <div className="ticker-track">
+          {['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation', 'Mobile Apps', 'E-Commerce', 'Lucknow · India', 'Global Delivery'].map((x, i) => (
+            <span key={i} style={{ padding: '0 28px', display: 'inline-flex', alignItems: 'center', gap: 28 }}>
+              {x} <span style={{ color: 'var(--electric)', fontSize: 16 }}>✦</span>
+            </span>
+          ))}
+          {['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation', 'Mobile Apps', 'E-Commerce', 'Lucknow · India', 'Global Delivery'].map((x, i) => (
+            <span key={`b-${i}`} style={{ padding: '0 28px', display: 'inline-flex', alignItems: 'center', gap: 28 }}>
+              {x} <span style={{ color: 'var(--electric)', fontSize: 16 }}>✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
 
+      {/* Intro */}
+      <section className="section wrap">
+        <div className="intro-section">
+          <Reveal>
+            <div>
+              <Eyebrow>Rooted in Lucknow · Built for the world</Eyebrow>
+              <h2 className="section-h2">Clarity first.<br /><em>Kriya always.</em></h2>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <div>
+              <p className="section-lead">
+                "Kriya" means intentional, creative action. At Kriya Labs, we pair deep engineering rigor with modern Indian craftsmanship—building digital products that look extraordinary and perform without compromise.
+              </p>
+              <ArrowLink to="/about">Get to know Kriya Labs</ArrowLink>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <ServicesPreview />
+      <WorkPreview />
+      <ProcessSection />
+      <ContactCta />
+    </main>
+  )
+}
+
+/* ─── Interactive Services Section (Services We Provide) ─── */
+function ServicesPreview() {
+  const [activeIdx, setActiveIdx] = useState(0)
+  const [currency] = useCurrency()
+  const activeService = services[activeIdx] || services[0]
+  const [
+    activeName,
+    activeDesc,
+    ActiveIcon,
+    activeDeliverables = [],
+    activeTimeline = '2–4 weeks',
+    activePrice = { INR: 'From ₹45,000', USD: 'From $950' }
+  ] = activeService
+
+  return (
+    <section className="section services-section">
+      <div className="wrap">
+        <div className="section-heading">
+          <div>
+            <Eyebrow>Services we provide</Eyebrow>
+            <h2 className="section-h2">Digital, end to <em>end.</em></h2>
+          </div>
+          <p>Tap or hover any discipline to explore our deliverables, architecture, transparent {currency} pricing, and typical delivery timelines.</p>
+        </div>
+
+        {/* Interactive Showcase Panel (Great on Mobile & Desktop) */}
+        <div className="services-showcase">
+          {/* Pill / Tab selector (horizontally scrollable on mobile) */}
+          <div className="service-tabs" role="tablist" aria-label="Services we provide">
+            {services.map(([name, , Icon], i) => {
+              const isSelected = i === activeIdx
+              return (
+                <button
+                  key={name}
+                  type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  className={`service-tab${isSelected ? ' active' : ''}`}
+                  onClick={() => setActiveIdx(i)}
+                >
+                  <span className="service-tab-num">0{i + 1}</span>
+                  <Icon size={16} className="service-tab-icon" />
+                  <span className="service-tab-name">{name}</span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Spotlight Detail Panel */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${activeName}-${currency}`}
+              className="service-spotlight"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="spotlight-main">
+                <div className="spotlight-badge-row">
+                  <span className="spotlight-index">0{activeIdx + 1} / 0{services.length}</span>
+                  <span className="spotlight-timeline"><Clock size={12} /> Avg. {activeTimeline}</span>
+                  <span className="spotlight-price">{activePrice[currency]}</span>
+                </div>
+                <h3>{activeName}</h3>
+                <p>{activeDesc}</p>
+                <div className="spotlight-actions">
+                  <CtaLink to="/contact">Book this service</CtaLink>
+                  <ArrowLink to="/services">View full scope</ArrowLink>
+                </div>
+              </div>
+
+              <div className="spotlight-deliverables">
+                <div className="spotlight-icon-box">
+                  <ActiveIcon size={28} strokeWidth={1.5} />
+                </div>
+                <h4>Key Deliverables &amp; Stack</h4>
+                <div className="deliverable-chips">
+                  {activeDeliverables.map(item => (
+                    <span key={item} className="deliverable-chip">
+                      <Check size={13} /> {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Full Bento Grid of All Services */}
+        <StaggerContainer className="bento-grid">
+          {services.slice(0, 6).map(([name, desc, Icon, deliverables = [], timeline = '2–4 weeks', price = {}], i) => (
+            <StaggerItem key={name}>
+              <Link
+                className={`bento-tile${i === 0 ? ' featured' : ''}${i === activeIdx ? ' is-selected' : ''}`}
+                to="/services"
+                onMouseEnter={() => setActiveIdx(i)}
+                onMouseMove={e => {
+                  const rect = e.currentTarget.getBoundingClientRect()
+                  e.currentTarget.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`)
+                  e.currentTarget.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`)
+                }}
+              >
+                <div className="tile-header">
+                  <span className="tile-num">0{i + 1}</span>
+                  <span className="tile-time">{price[currency] || timeline}</span>
+                  <div className="tile-icon-wrap">
+                    <Icon size={20} className="tile-icon" strokeWidth={1.6} />
+                  </div>
+                </div>
+                <h3>{name}</h3>
+                <p>{desc}</p>
+                <div className="tile-tags">
+                  {deliverables.slice(0, 3).map(tag => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
+                <span className="tile-arrow"><MoveUpRight size={16} /></span>
+              </Link>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
+
+        <div className="center-link">
+          <ArrowLink to="/services">Explore all {services.length} capabilities &amp; {currency} packages</ArrowLink>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Work Preview ───────────────────────────────────── */
+function WorkPreview() {
+  const reduceMotion = useReducedMotion()
+  return (
+    <section className="section work-section">
+      <div className="wrap">
+        <div className="section-heading">
+          <div>
+            <Eyebrow>Selected concepts</Eyebrow>
+            <h2 className="section-h2">Different stories.<br /><em>Made tangible.</em></h2>
+          </div>
+          <p>Three interactive concept projects built by {agency.name} showing how tailored digital experiences elevate hospitality, education, and local businesses.</p>
+        </div>
+
+        <div className="project-grid">
+          {projects.map((p, i) => (
+            <motion.div
+              key={p.slug}
+              initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.12 }}
+              whileHover={reduceMotion ? undefined : { y: -5 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: i * 0.05 }}
+              style={{ willChange: 'transform, opacity' }}
+            >
+              <Link to={`/projects/${p.slug}`} className="project-card">
+                <div className="project-photo">
+                  <img src={img(p.image, 1100)} alt={`${p.name} concept website preview`} loading="lazy" />
+                  <div className="project-overlay" />
+                  <span className="concept-tag">Interactive live demo</span>
+                  <span className="project-number">0{i + 1}</span>
+                  <span className="project-open"><MoveUpRight size={18} /></span>
+                </div>
+                <div className="project-info">
+                  <div>
+                    <span className="project-category">{p.category}</span>
+                    <h3>{p.name}</h3>
+                    <p>{p.description}</p>
+                  </div>
+                  <ArrowRight size={18} />
+                </div>
+                <div className="tag-row">
+                  {p.tags.map(tag => <span key={tag}>{tag}</span>)}
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+
+        <p className="concept-disclaimer">
+          <Asterisk size={13} />
+          Click any card above to launch a full multi-page interactive prototype engineered by {agency.name}.
+        </p>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Process Section ────────────────────────────────── */
+function ProcessSection() {
+  const steps = ['Listen & discover', 'Shape the strategy', 'Design the experience', 'Build with care', 'Test & refine', 'Launch & scale']
+  return (
+    <section className="section process-section">
+      <div className="wrap process-grid">
+        <Reveal>
+          <div>
+            <Eyebrow>A clear path forward</Eyebrow>
+            <h2 className="section-h2">Thoughtful from<br /><em>first hello.</em></h2>
+            <p className="section-lead" style={{ marginTop: 16 }}>
+              Whether you're a founder in Lucknow, Bengaluru, or half a world away, we work as an extension of your team with transparent sprints and direct communication.
+            </p>
+            <CtaLink to="/contact" secondary>Talk through an idea</CtaLink>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <div className="process-list">
+            {steps.map((step, i) => (
+              <div className="process-item" key={step}>
+                <span>0{i + 1}</span>
+                <b>{step}</b>
+                <ArrowRight size={15} />
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Contact CTA ────────────────────────────────────── */
+function ContactCta() {
+  return (
+    <section className="section contact-cta">
+      <div className="cta-glow-bg" />
+      <GradientOrb color="electric" size={700} top="50%" left="50%" opacity={0.08}
+        style={{ transform: 'translate(-50%, -50%)' }} />
+      <div className="wrap cta-content">
+        <Eyebrow>Good things start with a conversation</Eyebrow>
+        <h2>Have a bold<br />idea? <em>We're in.</em></h2>
+        <p>Tell us what you're building. We'll respond within 24 hours with clear thoughts, timeline estimates, and next steps.</p>
+        <div className="cta-actions">
+          <CtaLink to="/contact">Start a project</CtaLink>
+          <ArrowLink to="/work">See our work first</ArrowLink>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Agency Pages ───────────────────────────────────── */
 export function AgencyPage({ page }) {
-  useEffect(() => { const titles = { services: 'Digital design & development services', work: 'Selected concept projects', about: 'About our independent studio', contact: 'Start a project conversation' }; updatePageMeta(`${titles[page]} — ${agency.name}`, `${titles[page]} from ${agency.name}, an independent digital studio for thoughtful websites, products, and digital systems.`) }, [page])
-  if (page === 'services') return <main className="inner-page"><div className="wrap inner-hero"><Eyebrow>What we do</Eyebrow><h1>Good ideas deserve<br /><em>good execution.</em></h1><p>We bring the strategy, design, and engineering to move from “what if?” to work that makes a difference.</p></div><section className="wrap inner-services"><div className="service-grid">{services.map(([name, desc, Icon], i) => <article className="service-tile" key={name}><div className="service-top"><span>0{i + 1}</span><Icon size={23} strokeWidth={1.4} /></div><h3>{name}</h3><p>{desc}</p><ArrowLink to="/contact">Let’s discuss it</ArrowLink></article>)}</div></section><ContactCta /></main>
-  if (page === 'work') return <main className="inner-page"><div className="wrap inner-hero"><Eyebrow>Selected concepts</Eyebrow><h1>Good work in<br /><em>different worlds.</em></h1><p>Each concept is a chance to explore what thoughtful digital design can do for a different kind of business.</p></div><WorkPreview /><ContactCta /></main>
-  if (page === 'about') return <main className="inner-page"><div className="wrap inner-hero"><Eyebrow>A little about us</Eyebrow><h1>Thoughtful people.<br /><em>Useful outcomes.</em></h1><p>Form & Function is an independent digital studio for teams with something meaningful to make. We connect clear thinking with considered design and dependable technology.</p></div><section className="about-feature wrap"><img src={img('photo-1521737711867-e3b97375f902', 1200)} alt="A small creative team sharing ideas around a table"/><div><Eyebrow>How we like to work</Eyebrow><h2>Close collaboration.<br /><em>Clear decisions.</em></h2><p>Direct communication means you work with the people shaping the work. We make the process visible, the scope clear, and the details count.</p></div></section><section className="wrap values-grid">{[['Curiosity', 'We start by understanding the people, pressures, and possibilities around your project.'], ['Craft', 'We care about the small decisions because they make the whole experience feel considered.'], ['Partnership', 'We work alongside your team, with honest conversations and shared ownership.']].map(([title, desc], i) => <article key={title}><Eyebrow>0{i + 1}</Eyebrow><h3>{title}</h3><p>{desc}</p></article>)}</section><ContactCta /></main>
-  return <main className="inner-page"><div className="wrap inner-hero"><Eyebrow>Let’s start somewhere</Eyebrow><h1>Have an idea?<br /><em>Let’s talk.</em></h1><p>Share a little about what you’re working on. We’ll follow up with a few thoughtful questions and a clear next step.</p><div className="contact-email"><MessageCircle size={18} /><a href={`mailto:${agency.email}`}>{agency.email}</a></div></div><section className="wrap contact-layout"><div><h2>A good place to begin.</h2><p>Tell us the shape of the challenge, the people it matters to, and what a better outcome might look like.</p><div className="contact-detail"><span>Prefer email?</span><a href={`mailto:${agency.email}`}>{agency.email} <ArrowRight size={15} /></a></div><div className="contact-detail"><span>Our studio</span><b>{agency.location}</b></div></div><DemoForm title="A few details about your project" button="Send project enquiry" storage="agency-inquiries" fields={[{ name: 'name', label: 'Your name' }, { name: 'email', label: 'Email address', type: 'email' }, { name: 'business', label: 'Business name', required: false }, { name: 'service', label: 'Service required', options: ['Website design & development', 'Web application', 'Mobile application', 'AI automation', 'E-commerce', 'UI/UX design', 'API integration', 'Website optimization', 'Something else'], required: false }, { name: 'budget', label: 'Budget range', options: ['Under $2,500', '$2,500–$5,000', '$5,000–$10,000', '$10,000–$25,000', '$25,000+', 'Not sure yet'], required: false }, { name: 'description', label: 'Tell us a little about your project', wide: true, required: false, placeholder: 'What are you hoping to make possible?', multiline: true }]} /></section></main>
+  const [expandedService, setExpandedService] = useState(0)
+  const [currency] = useCurrency()
+
+  useEffect(() => {
+    const titles = {
+      services: 'Digital engineering, WebGL & AI services',
+      work: 'Selected interactive concept projects',
+      about: 'About Kriya Labs · Lucknow, India',
+      contact: 'Start a project conversation',
+    }
+    updatePageMeta(
+      `${titles[page]} — ${agency.name}`,
+      `${titles[page]} from ${agency.name}, an independent digital engineering & design studio in Lucknow, India.`
+    )
+  }, [page])
+
+  if (page === 'services') return (
+    <main className="inner-page">
+      <div className="wrap inner-hero">
+        <Eyebrow>Services we provide · {currency} Pricing</Eyebrow>
+        <h1>Good ideas deserve<br /><em>great execution.</em></h1>
+        <p>We bring strategy, design, and full-stack engineering together to move from "what if?" to digital products that make a measurable impact.</p>
+      </div>
+      <section className="wrap inner-services">
+        <StaggerContainer className="service-grid">
+          {services.map(([name, desc, Icon, deliverables = [], timeline = '2–4 weeks', price = {}], i) => {
+            const isExpanded = expandedService === i
+            return (
+              <StaggerItem key={name}>
+                <article
+                  className={`service-tile${isExpanded ? ' expanded' : ''}`}
+                  onClick={() => setExpandedService(isExpanded ? -1 : i)}
+                  onMouseMove={e => {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    e.currentTarget.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`)
+                    e.currentTarget.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`)
+                  }}
+                >
+                  <div className="service-top">
+                    <span>0{i + 1}</span>
+                    <span className="tile-time"><Clock size={11} /> {timeline} · {price[currency]}</span>
+                    <div className="tile-icon-wrap">
+                      <Icon size={20} strokeWidth={1.6} />
+                    </div>
+                  </div>
+                  <h3>{name}</h3>
+                  <p>{desc}</p>
+                  <div className="service-deliverables">
+                    {deliverables.map(item => (
+                      <span key={item} className="deliverable-chip">
+                        <Check size={12} /> {item}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="service-footer">
+                    <ArrowLink to="/contact">Book {name.split(' ')[0]} ({price[currency]})</ArrowLink>
+                    <MoveUpRight size={16} className="tile-arrow-inline" />
+                  </div>
+                </article>
+              </StaggerItem>
+            )
+          })}
+        </StaggerContainer>
+      </section>
+      <ProcessSection />
+      <ContactCta />
+    </main>
+  )
+
+  if (page === 'work') return (
+    <main className="inner-page">
+      <div className="wrap inner-hero">
+        <Eyebrow>Selected concepts</Eyebrow>
+        <h1>Good work in<br /><em>different worlds.</em></h1>
+        <p>Each interactive concept explores what thoughtful design and fast engineering can do for hospitality, education, and local service brands in India and beyond.</p>
+      </div>
+      <WorkPreview />
+      <ContactCta />
+    </main>
+  )
+
+  if (page === 'about') return (
+    <main className="inner-page">
+      <div className="wrap inner-hero">
+        <Eyebrow>About {agency.name}</Eyebrow>
+        <h1>Thoughtful people.<br /><em>Useful outcomes.</em></h1>
+        <p>{agency.name} is an independent digital engineering and design studio based in Lucknow, India, partnering with ambitious founders and teams worldwide.</p>
+      </div>
+      <section className="about-feature wrap">
+        <img src={img('photo-1521737711867-e3b97375f902', 1200)} alt="Creative engineering team collaborating" loading="lazy" />
+        <Reveal>
+          <div>
+            <Eyebrow>How we work</Eyebrow>
+            <h2>Close collaboration.<br /><em>Clear decisions.</em></h2>
+            <p>Direct communication means you work directly with the engineers and designers shaping the product. We make the process visible, the scope clear, and every micro-interaction count.</p>
+          </div>
+        </Reveal>
+      </section>
+      <section className="wrap values-grid">
+        {[
+          ['Kriya (Intentional Action)', 'We start by understanding the people, market realities, and growth opportunities around your project.'],
+          ['Engineering Craft', 'From 60fps animations to sub-second page loads, we care about the technical details that make products feel effortless.'],
+          ['True Partnership', 'Based in Lucknow and working across timezones, we collaborate with honest conversations and shared ownership.']
+        ].map(([title, desc], i) => (
+          <Reveal key={title} delay={i * 0.08}>
+            <article>
+              <Eyebrow>0{i + 1}</Eyebrow>
+              <h3>{title}</h3>
+              <p>{desc}</p>
+            </article>
+          </Reveal>
+        ))}
+      </section>
+      <ContactCta />
+    </main>
+  )
+
+  // Contact page with dynamic INR / USD budget ranges
+  const budgetOptions = currency === 'INR'
+    ? ['Under ₹50,000', '₹50,000 – ₹1,50,000', '₹1,50,000 – ₹3,50,000', '₹3,50,000 – ₹8,00,000', '₹8,00,000+', 'Not sure yet']
+    : ['Under $1,000', '$1,000 – $2,500', '$2,500 – $5,000', '$5,000 – $15,000', '$15,000+', 'Not sure yet']
+
+  return (
+    <main className="inner-page">
+      <div className="wrap inner-hero">
+        <Eyebrow>Let's start somewhere</Eyebrow>
+        <h1>Have an idea?<br /><em>Let's talk.</em></h1>
+        <p>Share a little about what you're working on. We'll follow up within 24 hours with a few thoughtful questions and a clear next step.</p>
+        <div className="contact-email">
+          <MessageCircle size={18} />
+          <a href={`mailto:${agency.email}`}>{agency.email}</a>
+        </div>
+      </div>
+      <section className="wrap contact-layout">
+        <div>
+          <h2>A good place to begin.</h2>
+          <p>Tell us the shape of the challenge, the people it matters to, and what a better outcome looks like for your business.</p>
+          <div className="contact-detail">
+            <span>Prefer email, call, or WhatsApp?</span>
+            <a href={`mailto:${agency.email}`}>{agency.email} <ArrowRight size={14} /></a>
+            <a href={`tel:+917007864516`}><Phone size={14} /> {agency.phone} (Call)</a>
+            <a href={agency.whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={14} /> {agency.phone} (WhatsApp)</a>
+          </div>
+          <div className="contact-detail">
+            <span>Our studio</span>
+            <b><MapPin size={14} /> {agency.location}</b>
+          </div>
+        </div>
+        <DemoForm
+          title={`Project enquiry (${currency})`}
+          button="Send project enquiry"
+          storage="kriya-labs-inquiries"
+          fields={[
+            { name: 'name', label: 'Your name' },
+            { name: 'email', label: 'Email address', type: 'email' },
+            { name: 'phone', label: 'Phone / WhatsApp (+91)', type: 'tel', placeholder: '+91 70078 64516', required: false },
+            { name: 'business', label: 'Company / Brand name', required: false },
+            { name: 'service', label: 'Service required', options: ['Website design & development', 'Web application', 'Mobile application', 'AI automation', 'E-commerce', 'UI/UX design', 'API integration', 'Website optimization', 'Something else'], required: false },
+            { name: 'budget', label: `Estimated budget (${currency})`, options: budgetOptions, required: false },
+            { name: 'description', label: 'Tell us about your project', wide: true, required: false, placeholder: 'Goals, timeline, or links you would like to share…', multiline: true }
+          ]}
+        />
+      </section>
+    </main>
+  )
 }

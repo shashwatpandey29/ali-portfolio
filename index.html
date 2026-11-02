@@ -1,18 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f6f4ef" />
-    <meta name="description" content="Thoughtful digital design and development for ambitious businesses." />
-    <meta property="og:title" content="Form & Function — Digital studio" />
-    <meta property="og:description" content="We make digital experiences that move businesses forward." />
+    <meta name="theme-color" content="#030712" />
+    <meta name="description" content="Kriya Labs — Next-generation digital engineering, WebGL, AI automation, and product design studio based in Lucknow, India." />
+    <meta property="og:title" content="Kriya Labs — Digital Engineering &amp; Design Studio" />
+    <meta property="og:description" content="We craft next-gen digital experiences, web applications, and AI systems from Lucknow, India for ambitious brands worldwide." />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Preconnects -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
-    <title>Form & Function — Digital studio</title>
+
+    <!-- Next-gen font stack: Inter + Playfair Display variable + DM Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+    <!-- Hide default cursor when custom cursor is active -->
+    <style>
+      @media (hover: hover) {
+        * { cursor: none !important; }
+      }
+      /* Prevent flash of unstyled content */
+      html { background: var(--void, #030712); }
+      html.light { background: #fbfcfe; }
+    </style>
+
+    <title>Kriya Labs — Digital Engineering &amp; Design Studio</title>
   </head>
-  <body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
