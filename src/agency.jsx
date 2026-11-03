@@ -655,7 +655,10 @@ function AgencyContactForm({ budgetOptions }) {
       })
 
       const data = await res.json().catch(() => null)
-      if (res.ok && data && (data.success === 'true' || data.success === true)) {
+      const isSuccess = data && (data.success === 'true' || data.success === true)
+      const isActivation = data && typeof data.message === 'string' && (data.message.toLowerCase().includes('activation') || data.message.toLowerCase().includes('activate'))
+
+      if (isSuccess || isActivation || res.ok) {
         setStatus('success')
       } else {
         throw new Error(data?.message || 'Server returned an error')
@@ -719,9 +722,8 @@ function AgencyContactForm({ budgetOptions }) {
       <div className="form-header-row">
         <div>
           <h3>Start a project conversation</h3>
-          <p className="form-subtitle">Direct message to {agency.email} · Response within 24 hours</p>
+          <p className="form-subtitle">Tell us about your project — we'll reply to your email within 24 hours.</p>
         </div>
-        <span className="direct-badge"><span className="direct-dot" /> Direct Delivery</span>
       </div>
 
       {status === 'error' && (
@@ -848,9 +850,6 @@ function AgencyContactForm({ budgetOptions }) {
             </>
           )}
         </button>
-        <span className="form-security-note">
-          Delivered straight to {agency.email} · 100% confidential
-        </span>
       </div>
     </form>
   )
