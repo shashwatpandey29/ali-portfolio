@@ -207,7 +207,42 @@ export default async function handler(req, res) {
       console.error('[MongoDB Error]: Could not insert inquiry into database:', dbErr)
     }
 
-    // 5. Send email via Resend if RESEND_API_KEY is configured
+    // 5. Forward to FormSubmit (direct delivery to elev8rix@gmail.com)
+    let emailForwarded = false
+    try {
+      const fsToken = process.env.FORMSUBMIT_TOKEN || '168804c9df11efbdf863c6198c2a34ad'
+      const fsRes = await fetch(`https://formsubmit.co/ajax/${fsToken}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Origin': 'https://elev8rix.vercel.app',
+          'Referer': 'https://elev8rix.vercel.app/contact',
+        },
+        body: JSON.stringify({
+          'Client Name': name,
+          'Work Email': email,
+          'Phone / WhatsApp': phone || 'Not provided',
+          'Company': business || 'Not provided',
+          'Service Needed': service || 'General inquiry',
+          'Estimated Budget': budget || 'Not specified',
+          'Project Details': description,
+          'Database Inquiry ID': inquiryId || 'N/A',
+          _subject: `New Project Inquiry: ${name}${business ? ` (${business})` : ''} - ${service || 'elev8rix'}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      })
+      const fsData = await fsRes.json().catch(() => null)
+      if (fsRes.ok && (fsData?.success === 'true' || fsData?.success === true)) {
+        emailForwarded = true
+        console.log('[FormSubmit] Successfully forwarded inquiry email to elev8rix@gmail.com')
+      }
+    } catch (fsErr) {
+      console.warn('[FormSubmit Error]: Could not forward inquiry email:', fsErr)
+    }
+
+    // 6. Send email via Resend if RESEND_API_KEY is configured
     const resendApiKey = process.env.RESEND_API_KEY
     if (resendApiKey) {
       try {

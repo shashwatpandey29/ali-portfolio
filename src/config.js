@@ -3,6 +3,7 @@ export const agency = {
   mark: 'e8.',
   tagline: 'Digital experiences that elevate your business',
   email: 'elev8rix@gmail.com',
+  formsubmitToken: '168804c9df11efbdf863c6198c2a34ad',
   phone: '+91 70078 64516',
   whatsapp: 'https://wa.me/917007864516',
   linkedin: 'https://linkedin.com/company/elev8rix',

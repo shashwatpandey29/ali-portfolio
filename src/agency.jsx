@@ -648,6 +648,7 @@ function AgencyContactForm({ budgetOptions }) {
     setErrorMessage('')
 
     try {
+      // 1. Submit through controlled backend (MongoDB Atlas storage + automated email forward)
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -670,16 +671,48 @@ function AgencyContactForm({ budgetOptions }) {
       const data = await res.json().catch(() => null)
       if (res.ok && data?.success) {
         setStatus('success')
-      } else {
-        throw new Error(data?.error || data?.message || 'Server returned an error')
+        return
       }
+
+      throw new Error(data?.error || data?.message || 'Server error')
     } catch (err) {
-      console.warn('Submission error, falling back:', err)
+      console.warn('Backend submission failed, trying direct FormSubmit fallback:', err)
+
+      // 2. Direct FormSubmit fallback with activated secure token
+      try {
+        const token = agency.formsubmitToken || '168804c9df11efbdf863c6198c2a34ad'
+        const fsRes = await fetch(`https://formsubmit.co/ajax/${token}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            Name: formData.name,
+            Email: formData.email,
+            'Phone / WhatsApp': formData.phone || 'Not provided',
+            Company: formData.business || 'Not provided',
+            Service: formData.service || 'General inquiry',
+            'Estimated Budget': formData.budget || 'Not specified',
+            Message: formData.description,
+            _subject: `New client inquiry from ${formData.name} via elev8rix`,
+            _template: 'table',
+            _captcha: 'false',
+          }),
+        })
+
+        const fsData = await fsRes.json().catch(() => null)
+        if (fsRes.ok && (fsData?.success === 'true' || fsData?.success === true)) {
+          setStatus('success')
+          return
+        }
+      } catch (fsErr) {
+        console.warn('Direct FormSubmit fallback also failed:', fsErr)
+      }
+
       setStatus('error')
       setErrorMessage(
-        err.message && !err.message.includes('fetch')
-          ? err.message
-          : 'Could not transmit automatically via server. Please click below to send directly through your mail app or WhatsApp.'
+        'Could not transmit automatically via server. Please click below to send directly through your mail app or WhatsApp.'
       )
     }
   }
