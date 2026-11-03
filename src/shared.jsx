@@ -524,6 +524,7 @@ export function CtaLink({ to, children, secondary = false }) {
 export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backTo = '/' }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const location = useLocation()
   const isDemo = ['cafe', 'school', 'business', 'fitness', 'legal'].includes(theme)
 
   useEffect(() => {
@@ -630,10 +631,14 @@ export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backT
 
       {/* Mobile Floating Bottom Dock */}
       <nav className="mobile-bottom-dock" aria-label={mobileCta ? 'Project enquiry' : 'Mobile quick navigation'}>
-        {mobileCta ? (
+        {mobileCta && location.pathname !== '/contact' ? (
           <Link className="mobile-dock-cta" to={mobileCta[1]} onClick={() => setOpen(false)}>
             {mobileCta[0]} <ArrowRight size={16} />
           </Link>
+        ) : mobileCta && location.pathname === '/contact' ? (
+          <a className="mobile-dock-cta mobile-dock-whatsapp" href={agency.whatsapp} target="_blank" rel="noreferrer">
+            <MessageCircle size={16} /> Quick-chat on WhatsApp
+          </a>
         ) : links.slice(0, 5).map(([name, to]) => {
           const lower = name.toLowerCase()
           const Icon = lower.includes('home') ? Home

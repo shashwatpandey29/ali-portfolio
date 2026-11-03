@@ -76,7 +76,7 @@ export function BusinessPage({ page }) {
             <ArrowLink to={`${base}/services`} light>Explore our services</ArrowLink>
           </div>
           <div className="business-trust">
-            <span><Check size={15} /> Itemized INR / USD estimates</span>
+            <span><Check size={15} /> Itemized transparent estimates</span>
             <span><Check size={15} /> Background-verified Lucknow team</span>
           </div>
         </div>
@@ -159,7 +159,7 @@ export function BusinessPage({ page }) {
         <div className="wrap">
           <Eyebrow>What we can help with</Eyebrow>
           <h1>Good hands for<br /><em>your home.</em></h1>
-          <p>Whether it’s a single repair or a complete interior overhaul, start with a conversation and we’ll help you plan the right next step. Toggle ₹ INR / $ USD in the header.</p>
+          <p>Whether it’s a single repair or a complete interior overhaul, start with a conversation and we’ll help you plan the right next step. Pricing is displayed automatically in your regional currency.</p>
           <CtaLink to={`${base}/book`}>Request an estimate</CtaLink>
         </div>
       </div>

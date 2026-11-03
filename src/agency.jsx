@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Asterisk, Check, Clock, MapPin, MessageCircle, MoveUpRight, Phone, Sparkles } from 'lucide-react'
+import { ArrowRight, Asterisk, Check, CheckCheck, Clock, Copy, Loader2, Mail, MapPin, MessageCircle, MoveUpRight, Phone, Send, Sparkles } from 'lucide-react'
 import { agency, concepts, img } from './config.js'
 import { agencyServices as services } from './data/services.js'
 import {
@@ -225,7 +225,7 @@ function ServicesPreview() {
             <Eyebrow>Services we provide</Eyebrow>
             <h2 className="section-h2">Digital, end to <em>end.</em></h2>
           </div>
-          <p>Explore deliverables and indicative {currency} starting prices. Final scope and schedule are confirmed after discovery.</p>
+          <p>Explore deliverables and indicative starting prices based on your region. Final scope and schedule are confirmed after discovery.</p>
         </div>
 
         {/* Interactive Showcase Panel (Great on Mobile & Desktop) */}
@@ -293,7 +293,7 @@ function ServicesPreview() {
         </div>
 
         <div className="center-link">
-          <ArrowLink to="/services">Explore all {services.length} capabilities &amp; {currency} packages</ArrowLink>
+          <ArrowLink to="/services">Explore all {services.length} capabilities &amp; deliverables</ArrowLink>
         </div>
       </div>
     </section>
@@ -432,7 +432,7 @@ export function AgencyPage({ page }) {
   if (page === 'services') return (
     <main className="inner-page">
       <div className="wrap inner-hero">
-        <Eyebrow>Services we provide · {currency} Pricing</Eyebrow>
+        <Eyebrow>Services we provide</Eyebrow>
         <h1>Good ideas deserve<br /><em>great execution.</em></h1>
         <p>We bring strategy, design, and full-stack engineering together to move from "what if?" to digital products that make a measurable impact.</p>
       </div>
@@ -468,7 +468,7 @@ export function AgencyPage({ page }) {
                     ))}
                   </div>
                   <div className="service-footer">
-                    <ArrowLink to="/contact">Book {name.split(' ')[0]} ({price[currency]})</ArrowLink>
+                    <ArrowLink to="/contact">Book this service ({price[currency]})</ArrowLink>
                     <MoveUpRight size={16} className="tile-arrow-inline" />
                   </div>
                 </article>
@@ -542,8 +542,9 @@ export function AgencyPage({ page }) {
         <h1>Have an idea?<br /><em>Let's talk.</em></h1>
         <p>Share a little about what you're working on. We'll follow up within 24 hours with a few thoughtful questions and a clear next step.</p>
         <div className="contact-email">
-          <MessageCircle size={18} />
+          <Mail size={18} />
           <a href={`mailto:${agency.email}`}>{agency.email}</a>
+          <CopyEmailButton email={agency.email} />
         </div>
       </div>
       <section className="wrap contact-layout">
@@ -551,33 +552,306 @@ export function AgencyPage({ page }) {
           <h2>A good place to begin.</h2>
           <p>Tell us the shape of the challenge, the people it matters to, and what a better outcome looks like for your business.</p>
           <div className="contact-detail">
-            <span>Prefer email, call, or WhatsApp?</span>
-            <a href={`mailto:${agency.email}`}>{agency.email} <ArrowRight size={14} /></a>
-            <a href={`tel:+917007864516`}><Phone size={14} /> {agency.phone} (Call)</a>
-            <a href={agency.whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={14} /> {agency.phone} (WhatsApp)</a>
+            <span>Direct channels</span>
+            <div className="contact-direct-link">
+              <a href={`mailto:${agency.email}`} className="direct-channel-item">
+                <Mail size={15} />
+                <span>{agency.email}</span>
+              </a>
+              <CopyEmailButton email={agency.email} />
+            </div>
+            <a href={`tel:+917007864516`} className="direct-channel-item">
+              <Phone size={15} />
+              <span>+91 70078 64516 <small>(Direct Call)</small></span>
+            </a>
+            <a href={agency.whatsapp} target="_blank" rel="noreferrer" className="direct-channel-item whatsapp-channel">
+              <MessageCircle size={15} />
+              <span>+91 70078 64516 <small>(WhatsApp Chat)</small></span>
+            </a>
+          </div>
+          <div className="contact-detail">
+            <span>Response guarantee</span>
+            <b>⚡ Response in under 4 hours · Mon–Sat</b>
           </div>
           <div className="contact-detail">
             <span>Our studio</span>
             <b><MapPin size={14} /> {agency.location}</b>
           </div>
         </div>
-        <DemoForm
-          title={`Project enquiry (${currency})`}
-          button="Open email draft"
-          mode="mailto"
-          recipient={agency.email}
-          subject="Project enquiry — elev8rix"
-          fields={[
-            { name: 'name', label: 'Your name' },
-            { name: 'email', label: 'Email address', type: 'email' },
-            { name: 'phone', label: 'Phone / WhatsApp', type: 'tel', placeholder: '70078 64516', required: false },
-            { name: 'business', label: 'Your company', required: false },
-            { name: 'service', label: 'Service required', options: ['Website design & development', 'Web application', 'Mobile application', 'AI automation', 'E-commerce', 'UI/UX design', 'API integration', 'Website optimization', 'Something else'], required: false },
-            { name: 'budget', label: `Estimated budget (${currency})`, options: budgetOptions, required: false },
-            { name: 'description', label: 'Tell us about your project', wide: true, required: false, placeholder: 'Goals, timeline, or links you would like to share…', multiline: true }
-          ]}
-        />
+        <AgencyContactForm budgetOptions={budgetOptions} />
       </section>
     </main>
+  )
+}
+
+/* ─── Contact Form Helper Components ─────────────────── */
+function CopyEmailButton({ email }) {
+  const [copied, setCopied] = useState(false)
+  const handleCopy = (e) => {
+    e.preventDefault()
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(email)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className={`copy-email-btn${copied ? ' copied' : ''}`}
+      title="Copy email to clipboard"
+      aria-label="Copy email address"
+    >
+      {copied ? <CheckCheck size={13} /> : <Copy size={13} />}
+      <span>{copied ? 'Copied!' : 'Copy'}</span>
+    </button>
+  )
+}
+
+function AgencyContactForm({ budgetOptions }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    business: '',
+    service: '',
+    budget: '',
+    description: '',
+  })
+  const [status, setStatus] = useState('idle') // 'idle' | 'submitting' | 'success' | 'error'
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (status === 'submitting') return
+    setStatus('submitting')
+    setErrorMessage('')
+
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${agency.email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          Name: formData.name,
+          Email: formData.email,
+          'Phone / WhatsApp': formData.phone || 'Not provided',
+          Company: formData.business || 'Not provided',
+          Service: formData.service || 'Not specified',
+          'Estimated Budget': formData.budget || 'Not specified',
+          Message: formData.description,
+          _subject: `New client inquiry from ${formData.name}${formData.business ? ` (${formData.business})` : ''} via elev8rix`,
+          _template: 'table',
+          _captcha: 'false'
+        })
+      })
+
+      const data = await res.json().catch(() => null)
+      if (res.ok && data && (data.success === 'true' || data.success === true)) {
+        setStatus('success')
+      } else {
+        throw new Error(data?.message || 'Server returned an error')
+      }
+    } catch (err) {
+      console.warn('Direct submission error, falling back:', err)
+      setStatus('error')
+      setErrorMessage(
+        'Could not transmit automatically via server. Please click below to send directly through your mail app or WhatsApp.'
+      )
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div className="contact-success-card" role="status">
+        <div className="contact-success-icon">
+          <Check size={28} />
+        </div>
+        <h3>Message delivered to elev8rix!</h3>
+        <p className="contact-success-lead">
+          Thank you, <strong>{formData.name}</strong>. Your inquiry has been sent directly to <strong>{agency.email}</strong>.
+        </p>
+        <p className="contact-success-sub">
+          We treat every project with urgency. Our team typically reviews and responds within <strong>2–4 hours</strong> (guaranteed within 24 hours).
+        </p>
+        <div className="contact-success-actions">
+          <a
+            href={`https://wa.me/917007864516?text=${encodeURIComponent(
+              `Hi elev8rix, I just submitted an inquiry on your website for ${formData.service || 'a project'}. My name is ${formData.name}.`
+            )}`}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-primary"
+          >
+            <MessageCircle size={16} /> Quick-chat on WhatsApp now
+          </a>
+          <button
+            type="button"
+            onClick={() => {
+              setStatus('idle')
+              setFormData({ name: '', email: '', phone: '', business: '', service: '', budget: '', description: '' })
+            }}
+            className="btn btn-ghost"
+          >
+            Send another message
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const fallbackMailto = `mailto:${agency.email}?subject=${encodeURIComponent(
+    `Project enquiry from ${formData.name || 'Client'}${formData.business ? ` - ${formData.business}` : ''}`
+  )}&body=${encodeURIComponent(
+    `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nCompany: ${formData.business}\nService: ${formData.service}\nBudget: ${formData.budget}\n\nProject details:\n${formData.description}`
+  )}`
+
+  return (
+    <form className="demo-form agency-contact-form" onSubmit={handleSubmit}>
+      <div className="form-header-row">
+        <div>
+          <h3>Start a project conversation</h3>
+          <p className="form-subtitle">Direct message to {agency.email} · Response within 24 hours</p>
+        </div>
+        <span className="direct-badge"><span className="direct-dot" /> Direct Delivery</span>
+      </div>
+
+      {status === 'error' && (
+        <div className="form-error-banner" role="alert">
+          <p>{errorMessage}</p>
+          <div className="error-actions">
+            <a href={fallbackMailto} className="btn btn-primary btn-sm">
+              <Mail size={14} /> Open prefilled email
+            </a>
+            <a
+              href={`https://wa.me/917007864516?text=${encodeURIComponent(
+                `Hi elev8rix, I'm reaching out about a project: ${formData.name} (${formData.email})`
+              )}`}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-ghost btn-sm"
+            >
+              <MessageCircle size={14} /> Send via WhatsApp
+            </a>
+          </div>
+        </div>
+      )}
+
+      <div className="field-grid">
+        <label className="field">
+          <span>Your name <b className="required-star">*</b></span>
+          <input
+            required
+            name="name"
+            type="text"
+            placeholder="Shashwat or Sarah"
+            value={formData.name}
+            onChange={handleChange}
+            autoComplete="name"
+          />
+        </label>
+
+        <label className="field">
+          <span>Email address <b className="required-star">*</b></span>
+          <input
+            required
+            name="email"
+            type="email"
+            placeholder="you@company.com"
+            value={formData.email}
+            onChange={handleChange}
+            autoComplete="email"
+          />
+        </label>
+
+        <label className="field">
+          <span>Phone / WhatsApp</span>
+          <input
+            name="phone"
+            type="tel"
+            placeholder="+91 70078 64516"
+            value={formData.phone}
+            onChange={handleChange}
+            autoComplete="tel"
+          />
+        </label>
+
+        <label className="field">
+          <span>Company / Brand</span>
+          <input
+            name="business"
+            type="text"
+            placeholder="Acme Corp or Studio Name"
+            value={formData.business}
+            onChange={handleChange}
+          />
+        </label>
+
+        <label className="field">
+          <span>Service required</span>
+          <select name="service" value={formData.service} onChange={handleChange}>
+            <option value="">Select a service</option>
+            <option value="Website design & development">Website design & development</option>
+            <option value="Web application">Web application (SaaS / Portal)</option>
+            <option value="Mobile application">Mobile application (iOS & Android)</option>
+            <option value="AI automation">AI automation & Agents</option>
+            <option value="E-commerce">E-commerce Storefront</option>
+            <option value="UI/UX design">UI/UX Design & Prototyping</option>
+            <option value="API & integrations">API & System Integrations</option>
+            <option value="Website optimization">Website Optimization & Speed</option>
+            <option value="Full digital transformation">Full digital transformation</option>
+          </select>
+        </label>
+
+        <label className="field">
+          <span>Estimated budget</span>
+          <select name="budget" value={formData.budget} onChange={handleChange}>
+            <option value="">Select an investment range</option>
+            {budgetOptions.map(o => (
+              <option key={o} value={o}>{o}</option>
+            ))}
+          </select>
+        </label>
+
+        <label className="field wide">
+          <span>Tell us about your project <b className="required-star">*</b></span>
+          <textarea
+            required
+            name="description"
+            rows={4}
+            placeholder="What are your goals, required features, timeline, or reference links you admire?"
+            value={formData.description}
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+
+      <div className="form-submit-row">
+        <button className="btn btn-primary" type="submit" disabled={status === 'submitting'}>
+          {status === 'submitting' ? (
+            <>
+              <Loader2 size={16} className="btn-spinner" />
+              <span>Sending message to elev8rix…</span>
+            </>
+          ) : (
+            <>
+              <span>Send project enquiry</span>
+              <Send size={15} />
+            </>
+          )}
+        </button>
+        <span className="form-security-note">
+          Delivered straight to {agency.email} · 100% confidential
+        </span>
+      </div>
+    </form>
   )
 }

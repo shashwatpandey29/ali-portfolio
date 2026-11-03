@@ -26,7 +26,7 @@ export const concepts = [
     category: 'Food & hospitality',
     description: 'A warm, editorial home for a modern neighbourhood table in Hazratganj. Explore the seasonal menu, the story, and a considered booking experience.',
     tags: ['Hospitality', 'Editorial', 'Reservations'],
-    preview: '/previews/maison-ember.png',
+    preview: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85',
     tone: 'cafe',
   },
   {
@@ -35,7 +35,7 @@ export const concepts = [
     category: 'Education',
     description: 'A clear, welcoming digital front door for curious minds, thoughtful families, and holistic K–12 learning in India.',
     tags: ['Education', 'Admissions', 'K–12 Campus'],
-    preview: '/previews/northfield.png',
+    preview: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=85',
     tone: 'school',
   },
   {
@@ -44,7 +44,7 @@ export const concepts = [
     category: 'Home & property',
     description: 'A confident residential & interior care experience that makes it easy to understand the work, meet the team, and request an estimate.',
     tags: ['Home services', 'Interiors', 'Lead generation'],
-    preview: '/previews/urbannest.png',
+    preview: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85',
     tone: 'business',
   },
   {

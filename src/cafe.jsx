@@ -147,7 +147,7 @@ export function CafePage({ page }) {
       <div className="sub-hero">
         <Eyebrow>From our kitchen, with care</Eyebrow>
         <h1>What’s <i>in season.</i></h1>
-        <p>Our menus change with the harvest. Toggle ₹ INR / $ USD in the top navigation bar to view prices in your preferred currency.</p>
+        <p>Our menus change with the harvest. Pricing is displayed automatically in your regional currency.</p>
       </div>
       <MenuBrowser />
     </main>
