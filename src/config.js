@@ -7,7 +7,7 @@ export const agency = {
   whatsapp: 'https://wa.me/917007864516',
   linkedin: 'https://linkedin.com/company/elev8rix',
   github: 'https://github.com/shashwatpandey29/ali-portfolio',
-  location: 'Lucknow & Bangalore, India · Available Worldwide',
+  location: 'India · Available Worldwide',
   services: [
     'Website design & development',
     'Web applications',
@@ -25,7 +25,7 @@ export const concepts = [
     slug: 'cafe',
     name: 'Maison Ember',
     category: 'Food & hospitality',
-    description: 'A warm, editorial home for a modern neighbourhood table in Hazratganj. Explore the seasonal menu, the story, and a considered booking experience.',
+    description: 'A warm, editorial home for a modern neighbourhood table. Explore the seasonal menu, the story, and a considered booking experience.',
     tags: ['Hospitality', 'Editorial', 'Reservations'],
     preview: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85',
     tone: 'cafe',

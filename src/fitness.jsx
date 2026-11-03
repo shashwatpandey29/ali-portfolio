@@ -7,7 +7,7 @@ import {
 } from './shared.jsx'
 
 const base = '/projects/fitness'
-const brand = { name: 'Forge Athletics', mark: 'F', sub: 'TRAIN WITH PURPOSE · LUCKNOW' }
+const brand = { name: 'Forge Athletics', mark: 'F', sub: 'TRAIN WITH PURPOSE' }
 const links = [['Home', base], ['Programs', `${base}/programs`], ['Coaches', `${base}/coaches`], ['Your first session', `${base}/book`]]
 const programs = [
   { title: 'Strength lab', note: 'Build strength with a plan that meets you where you are.', detail: 'Small group · 50 min', icon: Dumbbell },
@@ -20,7 +20,7 @@ export function FitnessLayout() {
   return <SmoothScrollProvider>
     <div className="demo-theme fitness-theme">
       <CustomCursor /><ScrollProgress />
-      <div className="fitness-topline"><span>TRAIN WITH PURPOSE · MOVE FOR LIFE</span><span>GOMTI NAGAR · LUCKNOW</span></div>
+      <div className="fitness-topline"><span>TRAIN WITH PURPOSE · MOVE FOR LIFE</span><span>MAIN FACILITY · INDIA</span></div>
       <SiteNav brand={brand} links={links} cta={['Book a trial', `${base}/book`]} theme="fitness" backTo={base} />
       <PageTransition />
       <SiteFooter brand={brand} home={base} note="A coaching-first training club built around strong foundations, good people, and progress that lasts." links={[

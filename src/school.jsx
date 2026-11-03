@@ -7,7 +7,7 @@ import {
 } from './shared.jsx'
 
 const base = '/projects/school'
-const brand = { name: 'Northfield', sub: 'INTERNATIONAL ACADEMY · LUCKNOW', mark: 'N' }
+const brand = { name: 'Northfield', sub: 'INTERNATIONAL ACADEMY', mark: 'N' }
 const links = [['Home', base], ['Our school', `${base}/about`], ['Academics', `${base}/academics`], ['Admissions', `${base}/admissions`], ['Contact', `${base}/contact`]]
 const formFields = [
   { name: 'parent', label: 'Parent / guardian name' },
@@ -26,7 +26,7 @@ export function SchoolLayout() {
         <CustomCursor />
         <ScrollProgress />
         <div className="school-banner">
-          <span>Learning with curiosity. Growing with purpose · Gomti Nagar Campus, Lucknow</span>
+          <span>Learning with curiosity. Growing with purpose · Campus &amp; Online</span>
           <span>Admissions for 2026–27 Academic Session <b>Now open</b></span>
         </div>
         <SiteNav brand={brand} links={links} cta={['Enquire now', `${base}/admissions`]} theme="school" backTo={base} />
@@ -34,7 +34,7 @@ export function SchoolLayout() {
         <SiteFooter
           brand={brand}
           home={base}
-          note="A welcoming K–12 learning community in Lucknow for curious minds and thoughtful futures."
+          note="A welcoming K–12 learning community for curious minds and thoughtful futures."
           links={[
             ['Our school', `${base}/about`],
             ['Academics', `${base}/academics`],
@@ -50,7 +50,7 @@ export function SchoolLayout() {
 export function SchoolPage({ page }) {
   useEffect(() => {
     const titles = { home: 'Learn with curiosity', about: 'Our school', academics: 'Learning at every stage', admissions: 'Admissions 2026–27', contact: 'Contact our campus' }
-    updatePageMeta(`${titles[page]} — Northfield International Academy`, `${titles[page]} at Northfield International Academy, a K–12 school concept in Gomti Nagar, Lucknow crafted by elev8rix.`)
+    updatePageMeta(`${titles[page]} — Northfield International Academy`, `${titles[page]} at Northfield International Academy, a progressive K–12 school concept crafted by elev8rix.`)
   }, [page])
 
   if (page === 'home') return (
@@ -59,7 +59,7 @@ export function SchoolPage({ page }) {
         <img src={img('photo-1509062522246-3755977927d7', 1800)} alt="Bright classroom where students learn together" decoding="async" fetchPriority="high" />
         <div className="school-hero-overlay" />
         <div className="wrap school-hero-content">
-          <Eyebrow>A place to become · Gomti Nagar, Lucknow</Eyebrow>
+          <Eyebrow>A place to become · Modern Campus</Eyebrow>
           <h1>Curious minds.<br /><span>Brighter futures.</span></h1>
           <p>At Northfield, learning is a shared adventure. We help every child discover what they care about—combining Indian values with global inquiry.</p>
           <CtaLink to={`${base}/about`} secondary>Discover Northfield</CtaLink>
@@ -76,7 +76,7 @@ export function SchoolPage({ page }) {
           <h2>Room to learn.<br /><span>Space to grow.</span></h2>
         </div>
         <div>
-          <p>We’re a progressive K–12 campus in Lucknow from early years through Grade 12. With dedicated educators, modern STEM &amp; arts studios, and lush green grounds, every student finds their voice.</p>
+          <p>We’re a progressive K–12 campus from early years through Grade 12. With dedicated educators, modern STEM &amp; arts studios, and lush green grounds, every student finds their voice.</p>
           <ArrowLink to={`${base}/about`}>Meet our school</ArrowLink>
         </div>
       </section>
@@ -133,7 +133,7 @@ export function SchoolPage({ page }) {
           <div>
             <Eyebrow>Come and see for yourself</Eyebrow>
             <h2>Your Northfield<br /><span>story starts here.</span></h2>
-            <p>We’d love to welcome your family for a guided campus tour in Lucknow. Start a conversation with our admissions counsellors.</p>
+            <p>We’d love to welcome your family for a guided campus tour. Start a conversation with our admissions counsellors.</p>
             <CtaLink to={`${base}/admissions`}>Explore admissions</CtaLink>
           </div>
           <div className="event-card">
@@ -163,7 +163,7 @@ export function SchoolPage({ page }) {
           <Eyebrow>Our story</Eyebrow>
           <h2>Growing together,<br /><span>every day.</span></h2>
           <p>Northfield International Academy is an interactive school concept designed by elev8rix around a simple belief: young people learn best when they feel safe enough to ask questions and supported enough to take thoughtful risks.</p>
-          <p>Our community brings together students, families, and educators across Lucknow who care about character as much as academic excellence.</p>
+          <p>Our community brings together students, families, and educators who care about character as much as academic excellence.</p>
         </div>
       </section>
       <section className="school-values">
@@ -270,17 +270,17 @@ export function SchoolPage({ page }) {
         <div className="wrap">
           <Eyebrow>We’re here to help</Eyebrow>
           <h1>Come say<br /><span>hello.</span></h1>
-          <p>We’d be happy to answer a question or schedule a campus visit for your family in Lucknow.</p>
+          <p>We’d be happy to answer a question or schedule a campus visit for your family.</p>
         </div>
       </div>
       <section className="contact-layout wrap school-contact">
         <div>
           <h2>Northfield International Academy</h2>
-          <p><MapPin size={18} /> Sector 7, Gomti Nagar Extension<br />Lucknow, Uttar Pradesh 226010</p>
+          <p><MapPin size={18} /> Campus Avenue, Education City</p>
           <p>School office hours<br />Monday–Saturday · 8:00 am–3:30 pm</p>
           <p>+91 522 401 8820<br />admissions@northfield.edu.in</p>
-          <a className="map-link" href="https://maps.google.com/?q=Gomti+Nagar+Extension+Lucknow" target="_blank" rel="noreferrer">Open in Google Maps <MoveUpRight size={16} /></a>
-          <div className="school-map">NORTHFIELD <span><MapPin size={22} /></span> GOMTI NAGAR · LUCKNOW</div>
+          <a className="map-link" href="https://maps.google.com" target="_blank" rel="noreferrer">Open in Google Maps <MoveUpRight size={16} /></a>
+          <div className="school-map">NORTHFIELD <span><MapPin size={22} /></span> CAMPUS GROUNDS</div>
         </div>
         <DemoForm title="Send a question" button="Send an enquiry" storage="northfield-contact" fields={formFields} />
       </section>

@@ -7,7 +7,7 @@ import {
 } from './shared.jsx'
 
 const base = '/projects/legal'
-const brand = { name: 'Alder & Rowe', mark: 'A/R', sub: 'COUNSEL WITH CLARITY · LUCKNOW' }
+const brand = { name: 'Alder & Rowe', mark: 'A/R', sub: 'COUNSEL WITH CLARITY' }
 const links = [['Home', base], ['Practice areas', `${base}/services`], ['Our people', `${base}/people`], ['Contact', `${base}/contact`]]
 const practices = [
   { title: 'Business & contracts', note: 'Practical counsel for agreements, partnerships, and day-to-day business decisions.', icon: BriefcaseBusiness },
@@ -21,7 +21,7 @@ export function LegalLayout() {
   return <SmoothScrollProvider>
     <div className="demo-theme legal-theme">
       <CustomCursor /><ScrollProgress />
-      <div className="legal-topline"><span>INDEPENDENT COUNSEL · LUCKNOW, INDIA</span><span>BY APPOINTMENT · MON–FRI</span></div>
+      <div className="legal-topline"><span>INDEPENDENT COUNSEL · INDIA</span><span>BY APPOINTMENT · MON–FRI</span></div>
       <SiteNav brand={brand} links={links} cta={['Request a consultation', `${base}/contact`]} theme="legal" backTo={base} />
       <PageTransition />
       <SiteFooter brand={brand} home={base} note="Clear advice. Considered advocacy. A steady hand through important decisions." links={[
@@ -61,7 +61,7 @@ export function LegalPage({ page }) {
   </main>
 
   return <main className="legal-home">
-    <section className="legal-hero"><div className="legal-hero-copy"><Eyebrow>Independent counsel · Lucknow, India</Eyebrow><h1>Clear counsel.<br /><em>Steady perspective.</em></h1><p>Thoughtful legal guidance for people and businesses navigating important decisions.</p><div className="hero-actions"><CtaLink to={`${base}/contact`}>Request a consultation</CtaLink><ArrowLink to={`${base}/services`}>Explore practice areas</ArrowLink></div><span className="legal-hero-caption">LISTEN WELL · ADVISE CLEARLY · ACT WITH CARE</span></div><div className="legal-hero-image"><img src={img('photo-1589829545856-d10d557cf95f', 1300)} alt="Law books and a balanced scale in a considered office" decoding="async" fetchPriority="high" /><span>COUNSEL WITH CLARITY</span></div></section>
+    <section className="legal-hero"><div className="legal-hero-copy"><Eyebrow>Independent counsel · India</Eyebrow><h1>Clear counsel.<br /><em>Steady perspective.</em></h1><p>Thoughtful legal guidance for people and businesses navigating important decisions.</p><div className="hero-actions"><CtaLink to={`${base}/contact`}>Request a consultation</CtaLink><ArrowLink to={`${base}/services`}>Explore practice areas</ArrowLink></div><span className="legal-hero-caption">LISTEN WELL · ADVISE CLEARLY · ACT WITH CARE</span></div><div className="legal-hero-image"><img src={img('photo-1589829545856-d10d557cf95f', 1300)} alt="Law books and a balanced scale in a considered office" decoding="async" fetchPriority="high" /><span>COUNSEL WITH CLARITY</span></div></section>
     <section className="legal-trust-strip"><span>Direct partner attention</span><span>Plain-language advice</span><span>Considered next steps</span></section>
     <section className="legal-intro wrap"><div><Eyebrow>When the details matter</Eyebrow><h2>Understand the issue.<br /><em>See the way forward.</em></h2></div><p>Legal questions can feel complicated before a conversation even begins. We make space to understand the facts, explain the options, and help you decide what to do next.</p></section>
     <section className="legal-practices wrap"><div className="vertical-section-head"><div><Eyebrow>Our focus</Eyebrow><h2>Practical advice.<br /><em>Personal attention.</em></h2></div><ArrowLink to={`${base}/services`}>View all practice areas</ArrowLink></div><div className="legal-practice-grid">{practices.slice(0, 3).map(({ title, note, icon: Icon }, i) => <article key={title}><span className="vertical-index">0{i + 1}</span><Icon size={21} /><h3>{title}</h3><p>{note}</p><ArrowLink to={`${base}/services`}>Learn more <ArrowUpRight size={14} /></ArrowLink></article>)}</div></section>

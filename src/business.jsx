@@ -7,7 +7,7 @@ import {
 } from './shared.jsx'
 
 const base = '/projects/business'
-const brand = { name: 'UrbanNest', sub: 'HOME & INTERIORS · LUCKNOW', mark: 'U' }
+const brand = { name: 'UrbanNest', sub: 'HOME & INTERIORS', mark: 'U' }
 const links = [['Home', base], ['Services', `${base}/services`], ['Our approach', `${base}/about`], ['Contact', `${base}/contact`]]
 const fields = [
   { name: 'name', label: 'Your name' },
@@ -16,7 +16,7 @@ const fields = [
   { name: 'service', label: 'What do you need help with?', options: ['Full Home Renovation', 'Modular Kitchen & Interiors', 'Plumbing & Waterproofing', 'Electrical & Smart Home', 'Painting & Wall Finishes', 'Annual Property Care'] },
   { name: 'property', label: 'Property type', options: ['Independent House / Villa', 'Apartment / Flat', 'Commercial / Office', 'Other'] },
   { name: 'date', label: 'Preferred site visit date', type: 'date', min: new Date().toISOString().slice(0, 10), required: false },
-  { name: 'details', label: 'Tell us about the project', multiline: true, wide: true, placeholder: 'Locality in Lucknow, approximate sq. ft., or what you would like us to inspect…' },
+  { name: 'details', label: 'Tell us about the project', multiline: true, wide: true, placeholder: 'Share your property type, approximate sq. ft., or what you would like us to inspect…' },
 ]
 const offerings = [
   ['Full home renovation', 'Thoughtful structural and civil improvements that make your home feel brand new.', 'photo-1600607687939-ce8a6c25118c', Hammer, { INR: 'From ₹45,000', USD: 'From $600' }],
@@ -35,7 +35,7 @@ export function BusinessLayout() {
         <CustomCursor />
         <ScrollProgress />
         <div className="business-topline">
-          <span>Trusted Home &amp; Interior Care across Lucknow</span>
+          <span>Trusted Home &amp; Interior Care</span>
           <a href="tel:+919876543210"><span className="status-dot" /> Site visits available today · +91 98765 43210</a>
         </div>
         <SiteNav brand={brand} links={links} cta={['Get a free estimate', `${base}/book`]} theme="business" backTo={base} />
@@ -58,8 +58,8 @@ export function BusinessLayout() {
 
 export function BusinessPage({ page }) {
   useEffect(() => {
-    const titles = { home: 'A better home starts here', services: 'Home & interior services', about: 'Our approach', book: 'Request a free site visit', contact: 'Contact UrbanNest Lucknow' }
-    updatePageMeta(`${titles[page]} — UrbanNest Services`, `${titles[page]} from UrbanNest, a home renovation and property care concept in Lucknow crafted by elev8rix.`)
+    const titles = { home: 'A better home starts here', services: 'Home & interior services', about: 'Our approach', book: 'Request a free site visit', contact: 'Contact UrbanNest' }
+    updatePageMeta(`${titles[page]} — UrbanNest Services`, `${titles[page]} from UrbanNest, a home renovation and property care concept crafted by elev8rix.`)
   }, [page])
 
   if (page === 'home') return (
@@ -68,7 +68,7 @@ export function BusinessPage({ page }) {
         <img src={img('photo-1600607687939-ce8a6c25118c', 1800)} alt="Light-filled, thoughtfully renovated home interior" decoding="async" fetchPriority="high" />
         <div className="business-shade" />
         <div className="wrap business-hero-copy">
-          <Eyebrow>Considered home services · Lucknow</Eyebrow>
+          <Eyebrow>Considered home services</Eyebrow>
           <h1>A better home<br />starts <em>right here.</em></h1>
           <p>From quick repairs to complete modular renovations across Gomti Nagar, Aliganj, and Hazratganj—UrbanNest makes caring for your home effortless.</p>
           <div className="hero-actions">
@@ -77,7 +77,7 @@ export function BusinessPage({ page }) {
           </div>
           <div className="business-trust">
             <span><Check size={15} /> Itemized transparent estimates</span>
-            <span><Check size={15} /> Background-verified Lucknow team</span>
+            <span><Check size={15} /> Background-verified team</span>
           </div>
         </div>
         <div className="business-hero-label">
@@ -120,7 +120,7 @@ export function BusinessPage({ page }) {
           </div>
           <div className="business-steps">
             {[
-              ['01', 'Tell us what you need', 'Share your locality in Lucknow and a few details about the repair or renovation.'],
+              ['01', 'Tell us what you need', 'Share your property location and a few details about the repair or renovation.'],
               ['02', 'Free site inspection', 'Our engineer visits your home to take measurements and discuss material options.'],
               ['03', 'Transparent BOQ estimate', 'You receive a clear, itemized estimate with zero hidden charges before work begins.'],
               ['04', 'Supervised execution', 'We protect your furniture, share daily WhatsApp updates, and hand over a spotless space.'],
@@ -206,10 +206,10 @@ export function BusinessPage({ page }) {
       <section className="team-note wrap">
         <Eyebrow>The people who make it happen</Eyebrow>
         <h2>Friendly faces.<br /><em>Skilled hands.</em></h2>
-        <p>In a live deployment, this section highlights verified site engineers, interior designers, and master technicians across Lucknow.</p>
+        <p>In a live deployment, this section highlights verified site engineers, interior designers, and master technicians.</p>
         <div className="team-placeholder">
           <div>UN</div>
-          <span>Verified Civil Engineers &amp; Interior Supervisors · Lucknow</span>
+          <span>Verified Civil Engineers &amp; Interior Supervisors</span>
         </div>
       </section>
     </>
@@ -231,7 +231,7 @@ export function BusinessPage({ page }) {
           <h3>What happens next?</h3>
           <p>This interactive concept form by elev8rix saves your request locally in your browser so you can test the lead flow.</p>
           <div><Check size={16} /> Transparent itemized estimates</div>
-          <div><Check size={16} /> Dedicated Lucknow site supervisor</div>
+          <div><Check size={16} /> Dedicated site supervisor</div>
         </div>
       </section>
     </>
@@ -243,16 +243,16 @@ export function BusinessPage({ page }) {
         <div className="wrap">
           <Eyebrow>Good to hear from you</Eyebrow>
           <h1>Here when<br /><em>you need us.</em></h1>
-          <p>Have a quick question or want to talk through a renovation idea in Lucknow? Send us a note and we’ll be in touch.</p>
+          <p>Have a quick question or want to talk through a renovation idea? Send us a note and we’ll be in touch.</p>
         </div>
       </div>
       <section className="contact-layout wrap business-contact">
         <div>
           <h2>UrbanNest Home Services</h2>
-          <p><MapPin size={17} /> Serving Gomti Nagar, Hazratganj, Indira Nagar &amp; across Lucknow</p>
+          <p><MapPin size={17} /> Serving central and surrounding metropolitan areas</p>
           <p><Clock3 size={17} /> Monday–Saturday · 9:00 am–7:00 pm</p>
           <p><a href="tel:+919876543210">+91 98765 43210</a><br /><a href="mailto:care@urbannest.in">care@urbannest.in</a></p>
-          <a className="map-link" href="https://maps.google.com/?q=Lucknow+Uttar+Pradesh" target="_blank" rel="noreferrer">Service area map <ArrowRight size={15} /></a>
+          <a className="map-link" href="https://maps.google.com" target="_blank" rel="noreferrer">Service area map <ArrowRight size={15} /></a>
           <a className="whatsapp-link" href="https://wa.me/919876543210" target="_blank" rel="noreferrer">Chat on WhatsApp <ArrowRight size={15} /></a>
           <p className="business-disclaimer">Interactive concept crafted by elev8rix · Contact details are illustrative.</p>
         </div>

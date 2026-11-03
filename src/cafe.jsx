@@ -8,7 +8,7 @@ import {
 } from './shared.jsx'
 
 const base = '/projects/cafe'
-const brand = { name: 'Maison Ember', mark: 'M.', sub: 'HAZRATGANJ · LUCKNOW' }
+const brand = { name: 'Maison Ember', mark: 'M.', sub: 'EST. 2024 · CONTEMPORARY TABLE' }
 const links = [['Home', base], ['Our menu', `${base}/menu`], ['Our story', `${base}/about`], ['Find us', `${base}/contact`]]
 const dishes = [
   { name: 'Burrata & charred fig', category: 'Starters', priceINR: '640', priceUSD: '18', description: 'Creamy artisanal burrata, charred fig, basil oil, wood-fired sourdough.', image: 'photo-1608039829572-78524f79c4c7', vegetarian: true },
@@ -41,7 +41,7 @@ export function CafeLayout() {
         <CustomCursor />
         <ScrollProgress />
         <div className="cafe-topline">
-          <span>Seasonal wood-fired cooking · Hazratganj, Lucknow</span>
+          <span>Seasonal wood-fired cooking</span>
           <span><Clock3 size={13} /> Dinner &amp; All-day Café · Tue–Sun · 12pm–11pm</span>
         </div>
         <SiteNav brand={brand} links={links} cta={['Book a table', `${base}/book`]} theme="cafe" backTo={base} />
@@ -49,7 +49,7 @@ export function CafeLayout() {
         <SiteFooter
           brand={brand}
           home={base}
-          note="Good food. Good company. Always room at our table in the heart of Lucknow."
+          note="Good food. Good company. Always room at our table."
           links={[
             ['Menu', `${base}/menu`],
             ['Our story', `${base}/about`],
@@ -64,8 +64,8 @@ export function CafeLayout() {
 
 export function CafePage({ page }) {
   useEffect(() => {
-    const titles = { home: 'A neighbourhood table in Lucknow', menu: 'Seasonal menu', about: 'Our story', contact: 'Find us in Hazratganj', book: 'Reserve your table' }
-    updatePageMeta(`${titles[page]} — Maison Ember`, `${titles[page]} at Maison Ember, a contemporary neighbourhood restaurant & café concept in Hazratganj, Lucknow crafted by elev8rix.`)
+    const titles = { home: 'A neighbourhood table', menu: 'Seasonal menu', about: 'Our story', contact: 'Find us', book: 'Reserve your table' }
+    updatePageMeta(`${titles[page]} — Maison Ember`, `${titles[page]} at Maison Ember, a contemporary neighbourhood restaurant & café concept crafted by elev8rix.`)
   }, [page])
 
   if (page === 'home') return (
@@ -76,13 +76,13 @@ export function CafePage({ page }) {
         <div className="cafe-hero-content">
           <Eyebrow>Seasonal, soulful, shared · Hazratganj</Eyebrow>
           <h1>A neighbourhood<br />table, <i>reimagined.</i></h1>
-          <p>Honest local produce, wood-fired craft, and the kind of unhurried Lucknow evening that makes you stay for one more cup.</p>
+          <p>Honest local produce, wood-fired craft, and the kind of unhurried evening that makes you stay for one more cup.</p>
           <div className="hero-actions">
             <CtaLink to={`${base}/book`} secondary>Reserve your seat</CtaLink>
             <ArrowLink to={`${base}/menu`} light>See the menu</ArrowLink>
           </div>
         </div>
-        <span className="cafe-hero-caption">26° 51′ N · 80° 56′ E · Hazratganj, Lucknow</span>
+        <span className="cafe-hero-caption">Seasonal Dining · Contemporary Table</span>
       </section>
 
       <section className="cafe-intro wrap">
@@ -129,7 +129,7 @@ export function CafePage({ page }) {
           <div>
             <Eyebrow>Come find us</Eyebrow>
             <h2>There’s a place<br /><i>for you here.</i></h2>
-            <p><MapPin size={16} /> 18 Park Road, Hazratganj, Lucknow, UP 226001</p>
+            <p><MapPin size={16} /> 18 Park Avenue, Central District</p>
           </div>
           <div className="visit-hours">
             <span>Tuesday – Thursday</span><b>12:00 – 10:30 pm</b>
@@ -158,7 +158,7 @@ export function CafePage({ page }) {
       <div className="wrap sub-hero">
         <Eyebrow>The Maison Ember story</Eyebrow>
         <h1>A little fire.<br /><i>A lot of heart.</i></h1>
-        <p>We wanted to create a space in Lucknow that felt like the warmest part of being invited home.</p>
+        <p>We wanted to create a space that felt like the warmest part of being invited home.</p>
       </div>
       <section className="cafe-story wrap">
         <img src={img('photo-1559339352-11d035aa65de', 1100)} alt="The intimate interior of Maison Ember" loading="lazy" decoding="async" />
@@ -166,7 +166,7 @@ export function CafePage({ page }) {
           <Eyebrow>Our kind of hospitality (Tehzeeb)</Eyebrow>
           <h2>Local hands.<br /><i>Open doors.</i></h2>
           <p>Maison Ember began with a simple question: what if dining out felt less hurried and more like gathering around a family table? We build our menu around regional growers, artisanal bakers, and small-batch roasters.</p>
-          <p>There’s no rush to turn the table. Just honest ingredients, Lucknow warmth, and space to reconnect.</p>
+          <p>There’s no rush to turn the table. Just honest ingredients, warmth, and space to reconnect.</p>
           <div className="chef-note">
             <span>In the kitchen</span>
             <b>Chef Aanya Mehra</b>
@@ -211,13 +211,13 @@ export function CafePage({ page }) {
       <div className="contact-layout cafe-contact">
         <div className="cafe-contact-info">
           <h2>Maison Ember</h2>
-          <p><MapPin size={16} />18 Park Road, Hazratganj<br />Lucknow, Uttar Pradesh 226001</p>
+          <p><MapPin size={16} />18 Park Avenue, Central District<br />Open Daily · 12:00 PM – 11:00 PM</p>
           <p><Clock3 size={16} />Tue–Thu 12–10:30pm · Fri–Sun 12–11:30pm</p>
-          <a className="map-link" href="https://maps.google.com/?q=Hazratganj+Lucknow" target="_blank" rel="noreferrer">Open in Google Maps <ArrowRight size={15} /></a>
+          <a className="map-link" href="https://maps.google.com" target="_blank" rel="noreferrer">Open in Google Maps <ArrowRight size={15} /></a>
           <div className="map-card">
             <span className="map-pin"><MapPin size={21} /></span>
             <b>MAISON EMBER</b>
-            <small>HAZRATGANJ · LUCKNOW</small>
+            <small>EST. 2024 · CONTEMPORARY TABLE</small>
           </div>
         </div>
         <DemoForm title="Send us a note" button="Send note" storage="maison-ember-messages" fields={fieldset('contact')} />
