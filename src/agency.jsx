@@ -800,7 +800,7 @@ function AgencyContactForm({ budgetOptions }) {
           <input
             type="tel"
             name="phone"
-            placeholder="+91 98765 43210"
+            placeholder="+91 0000000000"
             value={formData.phone}
             onChange={handleChange}
           />

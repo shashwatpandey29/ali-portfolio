@@ -507,9 +507,9 @@ export function DemoForm({ title = 'Send an enquiry', button = 'Send enquiry', f
             {f.label}
             {f.options
               ? <select name={f.name} required={f.required !== false}>
-                  <option value="">Choose one</option>
-                  {f.options.map(o => <option key={o}>{o}</option>)}
-                </select>
+                <option value="">Choose one</option>
+                {f.options.map(o => <option key={o}>{o}</option>)}
+              </select>
               : f.multiline
                 ? <textarea required={f.required !== false} name={f.name} placeholder={f.placeholder || ''} rows={4} />
                 : <input required={f.required !== false} name={f.name} type={f.type || 'text'} placeholder={f.placeholder || ''} />
@@ -794,9 +794,9 @@ export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backT
           const lower = name.toLowerCase()
           const Icon = lower.includes('home') ? Home
             : lower.includes('service') || lower.includes('menu') || lower.includes('academic') ? Layers
-            : lower.includes('work') || lower.includes('project') || lower.includes('admission') || lower.includes('quote') ? Briefcase
-            : lower.includes('about') || lower.includes('story') ? Info
-            : Mail
+              : lower.includes('work') || lower.includes('project') || lower.includes('admission') || lower.includes('quote') ? Briefcase
+                : lower.includes('about') || lower.includes('story') ? Info
+                  : Mail
           return (
             <NavLink key={to} to={to} end={to === backTo} className="dock-item" onClick={() => setOpen(false)}>
               <Icon size={18} strokeWidth={1.8} />
@@ -841,7 +841,7 @@ export function SiteFooter({ brand, links, note, home = '/' }) {
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} {brand.name} · Crafted in India</span>
-          <span>elev8rix · Interactive Portfolio</span>
+          <span>· elev8rix ·</span>
         </div>
       </div>
       <WhatsAppFloat />
