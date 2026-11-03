@@ -105,7 +105,7 @@ function HeroSection() {
             transition={{ duration: 0.75, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           >
             <Link className="hero-card hero-card-link" to="/projects/cafe" aria-label="Explore the Maison Ember hospitality concept">
-              <img src="/images/hero-cafe.jpg" alt="Maison Ember hospitality concept preview" />
+              <img src="/images/hero-cafe.jpg" alt="Maison Ember hospitality concept preview" decoding="async" fetchPriority="high" />
               <div className="hero-card-label">
                 <span>01 / Concept · Hospitality</span>
                 <b>Maison Ember</b>
@@ -121,7 +121,7 @@ function HeroSection() {
             transition={{ duration: 0.65, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             <Link className="hero-card hero-card-bordered hero-card-link" to="/projects/school" aria-label="Explore the Northfield education concept">
-              <img src="/images/hero-school.jpg" alt="Northfield International education concept preview" />
+              <img src="/images/hero-school.jpg" alt="Northfield International education concept preview" decoding="async" fetchPriority="high" />
               <div className="hero-card-label">
                 <span>02 / Concept · Education</span>
                 <b>Northfield International</b>
@@ -159,19 +159,25 @@ export function AgencyHome() {
     <main>
       <HeroSection />
 
-      {/* Ticker */}
-      <div className="ticker">
+      {/* Seamless Rotating Capabilities Marquee */}
+      <div className="ticker" aria-label="Core Capabilities">
         <div className="ticker-track" aria-hidden="true">
-          {['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation', 'Mobile Apps', 'E-Commerce', 'India', 'Global Delivery'].map((x, i) => (
-            <span key={i} style={{ padding: '0 28px', display: 'inline-flex', alignItems: 'center', gap: 28 }}>
-              {x} <span style={{ color: 'var(--electric)', fontSize: 16 }}>✦</span>
-            </span>
-          ))}
-          {['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation', 'Mobile Apps', 'E-Commerce', 'India', 'Global Delivery'].map((x, i) => (
-            <span key={`b-${i}`} style={{ padding: '0 28px', display: 'inline-flex', alignItems: 'center', gap: 28 }}>
-              {x} <span style={{ color: 'var(--electric)', fontSize: 16 }}>✦</span>
-            </span>
-          ))}
+          {[...Array(6)].map((_, rep) =>
+            ['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation'].map((item, i) => (
+              <span key={`a-${rep}-${i}`} className="ticker-item">
+                <span className="ticker-text">{item}</span>
+                <span className="ticker-star">✦</span>
+              </span>
+            ))
+          )}
+          {[...Array(6)].map((_, rep) =>
+            ['Strategy', 'UI/UX Design', 'Full-Stack Dev', 'AI Automation'].map((item, i) => (
+              <span key={`b-${rep}-${i}`} className="ticker-item">
+                <span className="ticker-text">{item}</span>
+                <span className="ticker-star">✦</span>
+              </span>
+            ))
+          )}
         </div>
       </div>
 
@@ -327,7 +333,7 @@ function WorkPreview() {
             >
               <Link to={`/projects/${p.slug}`} className="project-card">
                 <div className="project-photo">
-                  <img src={p.preview} alt={`${p.name} concept website preview`} loading="lazy" />
+                  <img src={p.preview} alt={`${p.name} concept website preview`} loading="lazy" decoding="async" />
                   <div className="project-overlay" />
                   <span className="concept-tag">Concept project · Live demo</span>
                   <span className="project-number">0{i + 1}</span>
@@ -502,7 +508,7 @@ export function AgencyPage({ page }) {
         <p>{agency.name} is an independent digital design and engineering studio in India. We work directly with growing teams to plan and build websites, web apps, and practical AI automations.</p>
       </div>
       <section className="about-feature wrap">
-        <img src="/images/about-team.jpg" alt="elev8rix digital design and engineering team" loading="lazy" />
+        <img src="/images/about-team.jpg" alt="elev8rix digital design and engineering team" loading="lazy" decoding="async" />
         <Reveal>
           <div>
             <Eyebrow>How we work</Eyebrow>

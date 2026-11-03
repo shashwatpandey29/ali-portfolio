@@ -2,8 +2,8 @@ import { useLayoutEffect, useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useLocation, useOutlet } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
-import { ArrowDownRight, ArrowRight, ArrowUpLeft, Briefcase, Check, Home, Info, Layers, Mail, Menu, MessageCircle, Moon, Sun, X } from 'lucide-react'
-import { agency, saveDemo } from './config.js'
+import { ArrowDownRight, ArrowRight, ArrowUpLeft, Briefcase, Check, ChevronDown, Home, Info, Layers, Mail, Menu, MessageCircle, Moon, Sun, X } from 'lucide-react'
+import { agency, concepts, saveDemo } from './config.js'
 
 /* ─── Automatic Region & Location Currency Detection (INR ₹ / USD $) ─── */
 function detectRegionalCurrency() {
@@ -551,8 +551,21 @@ export function CtaLink({ to, children, secondary = false }) {
 export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backTo = '/' }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [workDropdownOpen, setWorkDropdownOpen] = useState(false)
+  const dropdownTimeoutRef = useRef(null)
   const location = useLocation()
   const isDemo = ['cafe', 'school', 'business', 'fitness', 'legal'].includes(theme)
+
+  const handleWorkMouseEnter = () => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current)
+    setWorkDropdownOpen(true)
+  }
+
+  const handleWorkMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setWorkDropdownOpen(false)
+    }, 180)
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -565,6 +578,12 @@ export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backT
     document.body.style.overflow = open ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [open])
+
+  // Close dropdown on route change
+  useEffect(() => {
+    setOpen(false)
+    setWorkDropdownOpen(false)
+  }, [location.pathname])
 
   return (
     <>
@@ -580,9 +599,74 @@ export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backT
 
           {/* Desktop nav */}
           <nav className="nav-links" aria-label="Main navigation">
-            {links.map(([name, to]) => (
-              <NavLink key={to} to={to} end={to === backTo}>{name}</NavLink>
-            ))}
+            {links.map(([name, to]) => {
+              if (name === 'Our work' && !isDemo) {
+                return (
+                  <div
+                    key={to}
+                    className="nav-dropdown-wrapper"
+                    onMouseEnter={handleWorkMouseEnter}
+                    onMouseLeave={handleWorkMouseLeave}
+                  >
+                    <NavLink
+                      to={to}
+                      end={to === backTo}
+                      className="nav-dropdown-trigger"
+                      onClick={() => setWorkDropdownOpen(false)}
+                    >
+                      <span>{name}</span>
+                      <ChevronDown size={13} className={`dropdown-chevron ${workDropdownOpen ? 'open' : ''}`} />
+                    </NavLink>
+
+                    <AnimatePresence>
+                      {workDropdownOpen && (
+                        <motion.div
+                          className="nav-dropdown-menu"
+                          initial={{ opacity: 0, y: 10, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                          transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                        >
+                          <div className="dropdown-header">
+                            <span className="dropdown-title">Interactive Concepts</span>
+                            <span className="dropdown-count">{concepts.length} live demos</span>
+                          </div>
+                          <div className="dropdown-grid">
+                            {concepts.map((c) => (
+                              <Link
+                                key={c.slug}
+                                to={`/projects/${c.slug}`}
+                                className="dropdown-item"
+                                onClick={() => setWorkDropdownOpen(false)}
+                              >
+                                <div className="dropdown-item-meta">
+                                  <span className="dropdown-item-name">{c.name}</span>
+                                  <span className="dropdown-item-desc">{c.category}</span>
+                                </div>
+                                <ArrowRight size={13} className="dropdown-item-arrow" />
+                              </Link>
+                            ))}
+                          </div>
+                          <div className="dropdown-footer">
+                            <Link
+                              to="/work"
+                              className="dropdown-footer-link"
+                              onClick={() => setWorkDropdownOpen(false)}
+                            >
+                              <span>Explore all work & concepts</span>
+                              <ArrowRight size={12} />
+                            </Link>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )
+              }
+              return (
+                <NavLink key={to} to={to} end={to === backTo}>{name}</NavLink>
+              )
+            })}
             {isDemo && (
               <Link className="studio-return" to="/" onClick={() => setOpen(false)}>
                 <ArrowUpLeft size={13} />
@@ -618,40 +702,80 @@ export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backT
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <button className="close-btn" aria-label="Close menu" onClick={() => setOpen(false)}><X size={28} /></button>
-            {links.map(([name, to], i) => (
-              <motion.div
-                key={to}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <NavLink to={to} end={to === backTo} onClick={() => setOpen(false)}>{name}</NavLink>
-              </motion.div>
-            ))}
-            {isDemo && (
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: links.length * 0.05, duration: 0.28 }}
-              >
-                <Link className="studio-return" to="/" onClick={() => setOpen(false)}>
-                  <ArrowUpLeft size={14} /> elev8rix studio
+            <div className="mobile-menu-header">
+              <div className="mobile-brand">
+                <BrandMark brand={brand} />
+                <AgencyWordmark brand={brand} />
+              </div>
+              <button className="close-btn" aria-label="Close menu" onClick={() => setOpen(false)}>
+                <X size={22} />
+              </button>
+            </div>
+
+            <div className="mobile-menu-body">
+              <nav className="mobile-nav-links" aria-label="Mobile navigation">
+                {links.map(([name, to], i) => (
+                  <motion.div
+                    key={to}
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.04, duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <NavLink
+                      to={to}
+                      end={to === backTo}
+                      onClick={() => setOpen(false)}
+                      className="mobile-nav-link"
+                    >
+                      <span className="mobile-nav-num">0{i + 1}</span>
+                      <span className="mobile-nav-text">{name}</span>
+                      <ArrowRight size={15} className="mobile-nav-arrow" />
+                    </NavLink>
+                  </motion.div>
+                ))}
+              </nav>
+
+              {!isDemo && (
+                <div className="mobile-demos-section">
+                  <div className="mobile-demos-label">Live Interactive Demos</div>
+                  <div className="mobile-demos-chips">
+                    {concepts.map((c) => (
+                      <Link
+                        key={c.slug}
+                        to={`/projects/${c.slug}`}
+                        className="mobile-demo-chip"
+                        onClick={() => setOpen(false)}
+                      >
+                        {c.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {isDemo && (
+                <Link className="studio-return-mobile" to="/" onClick={() => setOpen(false)}>
+                  <ArrowUpLeft size={14} /> Return to elev8rix studio
                 </Link>
-              </motion.div>
-            )}
-            {cta && (
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: (links.length + 1) * 0.05, duration: 0.28 }}
-                style={{ marginTop: 16 }}
+              )}
+            </div>
+
+            <div className="mobile-menu-footer">
+              <a
+                href={agency.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-primary btn-sm mobile-menu-btn"
               >
-                <Link className="btn btn-primary" to={cta[1]} onClick={() => setOpen(false)}>
-                  {cta[0]} <ArrowRight size={14} />
-                </Link>
-              </motion.div>
-            )}
+                <MessageCircle size={15} /> WhatsApp
+              </a>
+              <a
+                href={`mailto:${agency.email}`}
+                className="btn btn-ghost btn-sm mobile-menu-btn"
+              >
+                <Mail size={15} /> {agency.email}
+              </a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

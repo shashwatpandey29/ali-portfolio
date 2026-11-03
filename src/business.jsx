@@ -65,7 +65,7 @@ export function BusinessPage({ page }) {
   if (page === 'home') return (
     <>
       <section className="business-hero">
-        <img src={img('photo-1600607687939-ce8a6c25118c', 1800)} alt="Light-filled, thoughtfully renovated home interior" />
+        <img src={img('photo-1600607687939-ce8a6c25118c', 1800)} alt="Light-filled, thoughtfully renovated home interior" decoding="async" fetchPriority="high" />
         <div className="business-shade" />
         <div className="wrap business-hero-copy">
           <Eyebrow>Considered home services · Lucknow</Eyebrow>
@@ -179,7 +179,7 @@ export function BusinessPage({ page }) {
         </div>
       </div>
       <section className="business-story wrap">
-        <img src={img('photo-1600607687939-ce8a6c25118c', 1100)} alt="A calm, well cared for living space" />
+        <img src={img('photo-1600607687939-ce8a6c25118c', 1100)} alt="A calm, well cared for living space" loading="lazy" decoding="async" />
         <div>
           <Eyebrow>Our approach</Eyebrow>
           <h2>Make the work<br /><em>feel workable.</em></h2>
@@ -227,7 +227,7 @@ export function BusinessPage({ page }) {
       <section className="wrap business-form-page">
         <DemoForm title="Book a free site visit & estimate" button="Request site visit" storage="urbannest-quotes" fields={fields} />
         <div className="quote-side">
-          <img src={img('photo-1600566753086-00f18fb6b3ea', 750)} alt="Home interior ready for thoughtful improvements" />
+          <img src={img('photo-1600566753086-00f18fb6b3ea', 750)} alt="Home interior ready for thoughtful improvements" loading="lazy" decoding="async" />
           <h3>What happens next?</h3>
           <p>This interactive concept form by elev8rix saves your request locally in your browser so you can test the lead flow.</p>
           <div><Check size={16} /> Transparent itemized estimates</div>
@@ -279,7 +279,7 @@ function ServiceCard({ item, index }) {
   return (
     <article className="business-service-card">
       <div className="b-service-photo">
-        <img src={img(photo, 800)} alt={`${title} service concept`} loading="lazy" />
+        <img src={img(photo, 800)} alt={`${title} service concept`} loading="lazy" decoding="async" />
         <span>0{index + 1} · {price[currency] || 'Custom quote'}</span>
       </div>
       <div className="b-service-content">

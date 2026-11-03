@@ -56,7 +56,7 @@ export function SchoolPage({ page }) {
   if (page === 'home') return (
     <>
       <section className="school-hero">
-        <img src={img('photo-1509062522246-3755977927d7', 1800)} alt="Bright classroom where students learn together" />
+        <img src={img('photo-1509062522246-3755977927d7', 1800)} alt="Bright classroom where students learn together" decoding="async" fetchPriority="high" />
         <div className="school-hero-overlay" />
         <div className="wrap school-hero-content">
           <Eyebrow>A place to become · Gomti Nagar, Lucknow</Eyebrow>
@@ -97,7 +97,7 @@ export function SchoolPage({ page }) {
               ['03', 'Senior School (Grades 9–12)', 'Rigorous academic preparation, robotics & innovation labs, and university career counselling.', 'photo-1503676260728-1c00da094a0b'],
             ].map(([n, title, desc, photo]) => (
               <article key={title} className="program-card">
-                <img src={img(photo, 700)} alt={`${title} students learning together`} loading="lazy" />
+                <img src={img(photo, 700)} alt={`${title} students learning together`} loading="lazy" decoding="async" />
                 <div>
                   <span>{n} / 03</span>
                   <h3>{title}</h3>
@@ -112,7 +112,7 @@ export function SchoolPage({ page }) {
 
       <section className="school-difference wrap">
         <div className="difference-photo">
-          <img src={img('photo-1529390079861-591de354faf5', 1000)} alt="Students working together on a classroom project" loading="lazy" />
+          <img src={img('photo-1529390079861-591de354faf5', 1000)} alt="Students working together on a classroom project" loading="lazy" decoding="async" />
           <span>Learning happens together.</span>
         </div>
         <div>
@@ -158,7 +158,7 @@ export function SchoolPage({ page }) {
         </div>
       </div>
       <section className="school-story wrap">
-        <img src={img('photo-1529390079861-591de354faf5', 1050)} alt="Students collaborating in a bright classroom" />
+        <img src={img('photo-1529390079861-591de354faf5', 1050)} alt="Students collaborating in a bright classroom" loading="lazy" decoding="async" />
         <div>
           <Eyebrow>Our story</Eyebrow>
           <h2>Growing together,<br /><span>every day.</span></h2>
@@ -211,7 +211,7 @@ export function SchoolPage({ page }) {
               <p>{d}</p>
               <span>NEP 2020 Aligned · Inquiry-led curriculum</span>
             </div>
-            <img src={img(photo, 700)} alt={`${t} at Northfield`} loading="lazy" />
+            <img src={img(photo, 700)} alt={`${t} at Northfield`} loading="lazy" decoding="async" />
           </article>
         ))}
       </section>

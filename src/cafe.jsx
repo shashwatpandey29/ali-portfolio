@@ -71,7 +71,7 @@ export function CafePage({ page }) {
   if (page === 'home') return (
     <main className="cafe-home">
       <section className="cafe-hero">
-        <img src={img('photo-1414235077428-338989a2e8c0', 1800)} alt="Warm, candlelit dining room at Maison Ember" />
+        <img src={img('photo-1414235077428-338989a2e8c0', 1800)} alt="Warm, candlelit dining room at Maison Ember" decoding="async" fetchPriority="high" />
         <div className="cafe-hero-shade" />
         <div className="cafe-hero-content">
           <Eyebrow>Seasonal, soulful, shared · Hazratganj</Eyebrow>
@@ -96,7 +96,7 @@ export function CafePage({ page }) {
 
       <section className="cafe-feature wrap">
         <div className="cafe-feature-image">
-          <img src={img(dishes[1].image, 950)} alt="Wild mushroom risotto served at Maison Ember" loading="lazy" />
+          <img src={img(dishes[1].image, 950)} alt="Wild mushroom risotto served at Maison Ember" loading="lazy" decoding="async" />
         </div>
         <div className="cafe-feature-copy">
           <Eyebrow>From the kitchen</Eyebrow>
@@ -161,7 +161,7 @@ export function CafePage({ page }) {
         <p>We wanted to create a space in Lucknow that felt like the warmest part of being invited home.</p>
       </div>
       <section className="cafe-story wrap">
-        <img src={img('photo-1559339352-11d035aa65de', 1100)} alt="The intimate interior of Maison Ember" />
+        <img src={img('photo-1559339352-11d035aa65de', 1100)} alt="The intimate interior of Maison Ember" loading="lazy" decoding="async" />
         <div>
           <Eyebrow>Our kind of hospitality (Tehzeeb)</Eyebrow>
           <h2>Local hands.<br /><i>Open doors.</i></h2>
@@ -176,7 +176,7 @@ export function CafePage({ page }) {
       </section>
       <div className="cafe-about-gallery wrap">
         {['photo-1517248135467-4c7edcad34c4', 'photo-1414235077428-338989a2e8c0', 'photo-1559339352-11d035aa65de'].map((id, i) => (
-          <img key={id} src={img(id, 700)} alt={['A table set for dinner', 'An evening in the dining room', 'The restaurant interior'][i]} loading="lazy" />
+          <img key={id} src={img(id, 700)} alt={['A table set for dinner', 'An evening in the dining room', 'The restaurant interior'][i]} loading="lazy" decoding="async" />
         ))}
       </div>
     </main>
@@ -192,7 +192,7 @@ export function CafePage({ page }) {
       <div className="form-page">
         <DemoForm title="Table reservation request" button="Request a table" storage="maison-ember-bookings" fields={fieldset('book')} />
         <aside className="reservation-aside">
-          <img src={img('photo-1414235077428-338989a2e8c0', 650)} alt="Warm evening dining at Maison Ember" />
+          <img src={img('photo-1414235077428-338989a2e8c0', 650)} alt="Warm evening dining at Maison Ember" loading="lazy" decoding="async" />
           <h3>A note from elev8rix</h3>
           <p>This is an interactive hospitality concept built by elev8rix. Your reservation request is saved locally in your browser.</p>
           <span>For private dining over 8 guests, please reach out directly.</span>
@@ -270,7 +270,7 @@ function DishCard({ dish, reduceMotion }) {
       transition={{ duration: reduceMotion ? 0 : 0.26, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="dish-image">
-        <img src={img(dish.image, 760)} alt={dish.name} loading="lazy" />
+        <img src={img(dish.image, 760)} alt={dish.name} loading="lazy" decoding="async" />
         <span>{dish.category}</span>
       </div>
       <div className="dish-title">
