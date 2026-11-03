@@ -137,16 +137,43 @@ export function ThemeToggle() {
 }
 
 /* ─── Page Meta ─────────────────────────────────────── */
-export function updatePageMeta(title, description) {
+export function updatePageMeta(title, description, path = '') {
   document.title = title
-  const set = (selector, attribute, value, create) => {
+  const baseUrl = 'https://elev8rix.vercel.app'
+  const currentPath = path || (typeof window !== 'undefined' ? window.location.pathname : '/')
+  const canonicalUrl = `${baseUrl}${currentPath === '/' ? '' : currentPath}`
+  const ogImage = `${baseUrl}/og-image.jpg`
+
+  const setMeta = (selector, attribute, value, tagName = 'meta') => {
     let node = document.head.querySelector(selector)
-    if (!node) { node = document.createElement(create); document.head.appendChild(node) }
+    if (!node) {
+      node = document.createElement(tagName)
+      document.head.appendChild(node)
+    }
     node.setAttribute(attribute, value)
+    return node
   }
-  set('meta[name="description"]', 'content', description, 'meta')
-  set('meta[property="og:title"]', 'content', title, 'meta')
-  set('meta[property="og:description"]', 'content', description, 'meta')
+
+  setMeta('meta[name="description"]', 'content', description)
+  setMeta('meta[property="og:title"]', 'content', title)
+  setMeta('meta[property="og:description"]', 'content', description)
+  setMeta('meta[property="og:url"]', 'content', canonicalUrl)
+  setMeta('meta[property="og:image"]', 'content', ogImage)
+  setMeta('meta[property="og:type"]', 'content', 'website')
+  setMeta('meta[property="og:site_name"]', 'content', 'elev8rix')
+
+  setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image')
+  setMeta('meta[name="twitter:title"]', 'content', title)
+  setMeta('meta[name="twitter:description"]', 'content', description)
+  setMeta('meta[name="twitter:image"]', 'content', ogImage)
+
+  let canonical = document.head.querySelector('link[rel="canonical"]')
+  if (!canonical) {
+    canonical = document.createElement('link')
+    canonical.setAttribute('rel', 'canonical')
+    document.head.appendChild(canonical)
+  }
+  canonical.setAttribute('href', canonicalUrl)
 }
 
 /* ─── Scroll Progress Bar ────────────────────────────── */

@@ -105,7 +105,7 @@ function HeroSection() {
             transition={{ duration: 0.75, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           >
             <Link className="hero-card hero-card-link" to="/projects/cafe" aria-label="Explore the Maison Ember hospitality concept">
-              <img src={img('photo-1414235077428-338989a2e8c0', 900)} alt="Warmly lit restaurant" />
+              <img src="/images/hero-cafe.jpg" alt="Maison Ember hospitality concept preview" />
               <div className="hero-card-label">
                 <span>01 / Concept · Hospitality</span>
                 <b>Maison Ember</b>
@@ -121,7 +121,7 @@ function HeroSection() {
             transition={{ duration: 0.65, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             <Link className="hero-card hero-card-bordered hero-card-link" to="/projects/school" aria-label="Explore the Northfield education concept">
-              <img src={img('photo-1509062522246-3755977927d7', 500)} alt="Students collaborating" />
+              <img src="/images/hero-school.jpg" alt="Northfield International education concept preview" />
               <div className="hero-card-label">
                 <span>02 / Concept · Education</span>
                 <b>Northfield International</b>
@@ -502,7 +502,7 @@ export function AgencyPage({ page }) {
         <p>{agency.name} is an independent digital design and engineering studio in India. We work directly with growing teams to plan and build websites, web apps, and practical AI automations.</p>
       </div>
       <section className="about-feature wrap">
-        <img src="/previews/urbannest.png" alt="UrbanNest home-services concept website preview" loading="lazy" />
+        <img src="/images/about-team.jpg" alt="elev8rix digital design and engineering team" loading="lazy" />
         <Reveal>
           <div>
             <Eyebrow>How we work</Eyebrow>
@@ -619,6 +619,8 @@ function AgencyContactForm({ budgetOptions }) {
     service: '',
     budget: '',
     description: '',
+    consent: false,
+    _hp: '',
   })
   const [status, setStatus] = useState('idle') // 'idle' | 'submitting' | 'success' | 'error'
   const [errorMessage, setErrorMessage] = useState('')
@@ -630,44 +632,48 @@ function AgencyContactForm({ budgetOptions }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (status === 'submitting') return
+    if (!formData.consent) {
+      setStatus('error')
+      setErrorMessage('Please confirm your consent before submitting.')
+      return
+    }
+
     setStatus('submitting')
     setErrorMessage('')
 
     try {
-      const res = await fetch(`https://formsubmit.co/ajax/${agency.email}`, {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
-          Name: formData.name,
-          Email: formData.email,
-          'Phone / WhatsApp': formData.phone || 'Not provided',
-          Company: formData.business || 'Not provided',
-          Service: formData.service || 'Not specified',
-          'Estimated Budget': formData.budget || 'Not specified',
-          Message: formData.description,
-          _subject: `New client inquiry from ${formData.name}${formData.business ? ` (${formData.business})` : ''} via elev8rix`,
-          _template: 'table',
-          _captcha: 'false'
-        })
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || '',
+          business: formData.business || '',
+          service: formData.service || '',
+          budget: formData.budget || '',
+          description: formData.description,
+          consent: formData.consent,
+          _hp: formData._hp || '',
+        }),
       })
 
       const data = await res.json().catch(() => null)
-      const isSuccess = data && (data.success === 'true' || data.success === true)
-      const isActivation = data && typeof data.message === 'string' && (data.message.toLowerCase().includes('activation') || data.message.toLowerCase().includes('activate'))
-
-      if (isSuccess || isActivation || res.ok) {
+      if (res.ok && data?.success) {
         setStatus('success')
       } else {
-        throw new Error(data?.message || 'Server returned an error')
+        throw new Error(data?.error || data?.message || 'Server returned an error')
       }
     } catch (err) {
-      console.warn('Direct submission error, falling back:', err)
+      console.warn('Submission error, falling back:', err)
       setStatus('error')
       setErrorMessage(
-        'Could not transmit automatically via server. Please click below to send directly through your mail app or WhatsApp.'
+        err.message && !err.message.includes('fetch')
+          ? err.message
+          : 'Could not transmit automatically via server. Please click below to send directly through your mail app or WhatsApp.'
       )
     }
   }
@@ -700,7 +706,7 @@ function AgencyContactForm({ budgetOptions }) {
             type="button"
             onClick={() => {
               setStatus('idle')
-              setFormData({ name: '', email: '', phone: '', business: '', service: '', budget: '', description: '' })
+              setFormData({ name: '', email: '', phone: '', business: '', service: '', budget: '', description: '', consent: false, _hp: '' })
             }}
             className="btn btn-ghost"
           >
@@ -747,51 +753,58 @@ function AgencyContactForm({ budgetOptions }) {
         </div>
       )}
 
+      {/* Honeypot field for spam prevention */}
+      <input
+        type="text"
+        name="_hp"
+        value={formData._hp}
+        onChange={handleChange}
+        tabIndex={-1}
+        autoComplete="off"
+        style={{ display: 'none', position: 'absolute', left: '-9999px', opacity: 0 }}
+        aria-hidden="true"
+      />
+
       <div className="field-grid">
         <label className="field">
           <span>Your name <b className="required-star">*</b></span>
           <input
             required
             name="name"
-            type="text"
-            placeholder="Shashwat or Sarah"
+            placeholder="e.g. Shashwat Pandey"
             value={formData.name}
             onChange={handleChange}
-            autoComplete="name"
           />
         </label>
 
         <label className="field">
-          <span>Email address <b className="required-star">*</b></span>
+          <span>Work email <b className="required-star">*</b></span>
           <input
             required
-            name="email"
             type="email"
+            name="email"
             placeholder="you@company.com"
             value={formData.email}
             onChange={handleChange}
-            autoComplete="email"
           />
         </label>
 
         <label className="field">
-          <span>Phone / WhatsApp</span>
+          <span>Phone / WhatsApp <small>(Optional)</small></span>
           <input
-            name="phone"
             type="tel"
-            placeholder="+91 70078 64516"
+            name="phone"
+            placeholder="+91 98765 43210"
             value={formData.phone}
             onChange={handleChange}
-            autoComplete="tel"
           />
         </label>
 
         <label className="field">
-          <span>Company / Brand</span>
+          <span>Company / Organization <small>(Optional)</small></span>
           <input
             name="business"
-            type="text"
-            placeholder="Acme Corp or Studio Name"
+            placeholder="Brand or venture name"
             value={formData.business}
             onChange={handleChange}
           />
@@ -834,6 +847,21 @@ function AgencyContactForm({ budgetOptions }) {
             onChange={handleChange}
           />
         </label>
+
+        <div className="field wide consent-field">
+          <label className="consent-checkbox-label">
+            <input
+              type="checkbox"
+              name="consent"
+              required
+              checked={formData.consent}
+              onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))}
+            />
+            <span>
+              I agree to elev8rix processing my contact details to reply to this project enquiry. We respect your confidentiality and never share your data.
+            </span>
+          </label>
+        </div>
       </div>
 
       <div className="form-submit-row">
@@ -852,5 +880,41 @@ function AgencyContactForm({ budgetOptions }) {
         </button>
       </div>
     </form>
+  )
+}
+
+export function NotFoundPage() {
+  useEffect(() => {
+    updatePageMeta(
+      'Page Not Found (404) · elev8rix',
+      'The requested page could not be found on elev8rix.',
+      '/404'
+    )
+  }, [])
+
+  return (
+    <main className="inner-page not-found-page">
+      <div className="wrap not-found-wrap">
+        <Eyebrow>404 / Page Not Found</Eyebrow>
+        <h1>This page has drifted.<br /><em>Let's get you back on track.</em></h1>
+        <p>
+          The page you're looking for doesn't exist, has been reorganized, or the link may have a typo.
+        </p>
+        <div className="not-found-actions">
+          <Link to="/" className="btn btn-primary">
+            Return to Homepage
+          </Link>
+          <Link to="/services" className="btn btn-ghost">
+            Explore Services
+          </Link>
+          <Link to="/work" className="btn btn-ghost">
+            View Live Demos
+          </Link>
+          <Link to="/contact" className="btn btn-ghost">
+            Contact Us
+          </Link>
+        </div>
+      </div>
+    </main>
   )
 }

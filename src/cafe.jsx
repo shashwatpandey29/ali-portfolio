@@ -16,7 +16,7 @@ const dishes = [
   { name: 'Smoked herb roast chicken', category: 'Main Course', priceINR: '980', priceUSD: '32', description: 'Free-range chicken, Gondhoraj lemon, garden herbs, silky pan jus.', image: 'photo-1532550907401-a500c9a57435' },
   { name: 'Blood orange olive oil cake', category: 'Desserts', priceINR: '480', priceUSD: '14', description: 'Candied citrus, whipped mascarpone, toasted Kashmir almond.', image: 'photo-1578985545062-69928b1d9587', vegetarian: true },
   { name: 'Whipped ricotta hotcakes', category: 'Breakfast', priceINR: '560', priceUSD: '19', description: 'House ricotta, Mahabaleshwar berries, organic honey butter.', image: 'photo-1528207776546-365bb710ee93', vegetarian: true },
-  { name: 'Ember botanical spritz', category: 'Beverages', priceINR: '420', priceUSD: '16', description: 'Zero-proof botanical aperitivo, blood orange, sparkling tonic, rosemary.', image: 'photo-1513558161293-cdaf765edfd7', vegetarian: true },
+  { name: 'Ember botanical spritz', category: 'Beverages', priceINR: '420', priceUSD: '16', description: 'Zero-proof botanical aperitivo, blood orange, sparkling tonic, rosemary.', image: 'photo-1551024709-8f23befc6f87', vegetarian: true },
 ]
 const cats = ['All', 'Breakfast', 'Starters', 'Main Course', 'Desserts', 'Beverages']
 const fieldset = (kind) => [

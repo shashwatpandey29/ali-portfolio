@@ -1,6 +1,4 @@
-/* ─── Google Fonts (must be first) ──────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&display=swap');
-
+/* Google Fonts are preloaded in index.html */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -2587,3 +2585,83 @@ html.dark .legal-practice-grid .arrow-link { color:#e0c58f; }
 html.dark .legal-theme .demo-form { background:#172128; border-color:rgba(240,238,232,.14); }
 html.dark .legal-theme .field input, html.dark .legal-theme .field textarea, html.dark .legal-theme .field select { background:#10171d; border-color:rgba(240,238,232,.18); color:#f0eee8; }
 html.dark .legal-theme .nav-cta, html.dark .legal-theme .btn-primary { background:#d0b27f; color:#172128; }
+
+/* ─── Contact Form Consent Checkbox ──────────────────── */
+.consent-field {
+  margin-top: 4px;
+}
+.consent-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-dim, #71717a);
+  user-select: none;
+}
+.consent-checkbox-label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+  border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.2));
+  background: var(--surface-2, rgba(255, 255, 255, 0.04));
+  cursor: pointer;
+  margin-top: 2px;
+  flex-shrink: 0;
+  display: grid;
+  place-content: center;
+  transition: all 0.15s ease;
+}
+.consent-checkbox-label input[type="checkbox"]:checked {
+  background: var(--text, #fff);
+  border-color: var(--text, #fff);
+}
+.consent-checkbox-label input[type="checkbox"]:checked::before {
+  content: "";
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid var(--bg, #090a0f);
+  border-bottom: 2px solid var(--bg, #090a0f);
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+.consent-checkbox-label:hover input[type="checkbox"] {
+  border-color: var(--text-muted, #a1a1aa);
+}
+
+/* ─── 404 Not Found Page ──────────────────────────────── */
+.not-found-page {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  text-align: center;
+}
+.not-found-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.not-found-wrap h1 {
+  margin: 20px 0 16px;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.15;
+}
+.not-found-wrap p {
+  color: var(--text-dim, #71717a);
+  font-size: 1.0625rem;
+  max-width: 520px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
