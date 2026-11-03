@@ -1,5 +1,9 @@
 // Vercel Serverless Function: /api/contact
-// Handles contact inquiries with validation, honeypot protection, rate limiting, and email dispatch
+// Handles contact inquiries with validation, honeypot protection, rate limiting,
+// MongoDB Atlas database storage, and email dispatch.
+
+import dns from 'dns'
+import { MongoClient } from 'mongodb'
 
 // In-memory rate limiter (sliding window per IP)
 const rateLimitMap = new Map()
@@ -10,15 +14,15 @@ function isRateLimited(ip) {
   const now = Date.now()
   const windowData = rateLimitMap.get(ip) || []
   const recent = windowData.filter(timestamp => now - timestamp < RATE_LIMIT_WINDOW_MS)
-  
+
   if (recent.length >= MAX_REQUESTS_PER_WINDOW) {
     rateLimitMap.set(ip, recent)
     return true
   }
-  
+
   recent.push(now)
   rateLimitMap.set(ip, recent)
-  
+
   // Cleanup old entries periodically
   if (rateLimitMap.size > 1000) {
     for (const [key, timestamps] of rateLimitMap.entries()) {
@@ -27,7 +31,7 @@ function isRateLimited(ip) {
       else rateLimitMap.set(key, valid)
     }
   }
-  
+
   return false
 }
 
@@ -35,6 +39,74 @@ function sanitize(str = '') {
   return String(str)
     .replace(/[<>]/g, '')
     .trim()
+}
+
+// Global cached MongoDB connection across serverless invocations
+let cachedClient = null
+let cachedDb = null
+
+async function loadLocalEnv() {
+  if (process.env.MONGODB_URI) return
+  try {
+    const fs = await import('fs')
+    const files = ['.env.local', 'atlas-credentials.env', '.env']
+    for (const f of files) {
+      if (fs.existsSync(f)) {
+        const lines = fs.readFileSync(f, 'utf8').split('\n')
+        for (const line of lines) {
+          const trimmed = line.trim()
+          if (!trimmed || trimmed.startsWith('#')) continue
+          const eq = trimmed.indexOf('=')
+          if (eq > 0) {
+            const key = trimmed.slice(0, eq).trim()
+            let val = trimmed.slice(eq + 1).trim()
+            if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+              val = val.slice(1, -1)
+            }
+            if (!process.env[key]) {
+              process.env[key] = val
+            }
+          }
+        }
+      }
+    }
+  } catch {
+    // ignore
+  }
+}
+
+async function getDatabase() {
+  await loadLocalEnv()
+
+  if (cachedClient && cachedDb) {
+    return { client: cachedClient, db: cachedDb }
+  }
+
+  const uri = process.env.MONGODB_URI
+  if (!uri) {
+    console.warn('[MongoDB] MONGODB_URI not found in environment variables')
+    return { client: null, db: null }
+  }
+
+  try {
+    // Configure resilient public DNS resolver for Windows / cloud SRV lookups
+    dns.setServers(['8.8.8.8', '1.1.1.1'])
+  } catch {
+    // ignore
+  }
+
+  const client = new MongoClient(uri, {
+    maxPoolSize: 10,
+    serverSelectionTimeoutMS: 5000,
+  })
+
+  await client.connect()
+  const dbName = process.env.MONGODB_DB || 'elev8rix'
+  const db = client.db(dbName)
+
+  cachedClient = client
+  cachedDb = db
+  return { client, db }
 }
 
 export default async function handler(req, res) {
@@ -69,7 +141,6 @@ export default async function handler(req, res) {
 
     // 2. Honeypot Check (spam bot trap)
     if (body._hp || body.website_url_hp) {
-      // Silently accept so bot doesn't know it failed
       console.warn(`[Spam honeypot triggered] IP: ${ip}`)
       return res.status(200).json({ success: true, message: 'Inquiry received' })
     }
@@ -101,9 +172,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: 'Please accept the privacy consent to submit.' })
     }
 
-    const inquiry = {
-      receivedAt: new Date().toISOString(),
-      clientIp: ip,
+    const inquiryData = {
       name,
       email,
       phone: phone || 'Not provided',
@@ -111,11 +180,34 @@ export default async function handler(req, res) {
       service: service || 'General inquiry',
       budget: budget || 'Not specified',
       description,
+      status: 'new',
+      source: 'elev8rix.vercel.app/contact',
+      clientIp: ip,
+      userAgent: req.headers['user-agent'] || 'unknown',
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }
 
-    console.log('[elev8rix Inquiry Received]:', JSON.stringify(inquiry, null, 2))
+    console.log('[elev8rix Inquiry Received]:', JSON.stringify(inquiryData, null, 2))
 
-    // 4. Send email via Resend if RESEND_API_KEY is configured
+    // 4. Save to MongoDB Atlas
+    let dbSaved = false
+    let inquiryId = null
+
+    try {
+      const { db } = await getDatabase()
+      if (db) {
+        const collection = db.collection('inquiries')
+        const result = await collection.insertOne(inquiryData)
+        dbSaved = result.acknowledged
+        inquiryId = result.insertedId ? String(result.insertedId) : null
+        console.log(`[MongoDB] Successfully stored inquiry with ID: ${inquiryId}`)
+      }
+    } catch (dbErr) {
+      console.error('[MongoDB Error]: Could not insert inquiry into database:', dbErr)
+    }
+
+    // 5. Send email via Resend if RESEND_API_KEY is configured
     const resendApiKey = process.env.RESEND_API_KEY
     if (resendApiKey) {
       try {
@@ -148,6 +240,12 @@ export default async function handler(req, res) {
                 <td style="padding: 10px 0; font-weight: bold;">Estimated Budget:</td>
                 <td style="padding: 10px 0;">${budget}</td>
               </tr>
+              ${inquiryId ? `
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 0; font-weight: bold;">Database ID:</td>
+                <td style="padding: 10px 0; font-family: monospace; font-size: 12px;">${inquiryId}</td>
+              </tr>
+              ` : ''}
             </table>
             <div style="margin-top: 24px; padding: 16px; background: #f8f9fa; border-left: 3px solid #000; border-radius: 4px;">
               <h4 style="margin: 0 0 8px 0;">Project Details:</h4>
@@ -182,7 +280,9 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      message: 'Thank you! Your enquiry has been received and our team will reply within 24 hours.',
+      message: 'Thank you! Your enquiry has been received and stored in our database. Our team will reply within 24 hours.',
+      inquiryId: inquiryId || undefined,
+      dbSaved,
     })
   } catch (err) {
     console.error('[Contact handler error]:', err)
