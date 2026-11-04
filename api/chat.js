@@ -1,8 +1,9 @@
 // Vercel Serverless Function: /api/chat
 // Keeps the Gemini API key on the server and sends stateless, bounded chat turns.
 
-const DEFAULT_MODEL = 'gemma-4-31b-it'
-const FALLBACK_MODEL = 'gemini-3.8-flash'
+const DEFAULT_MODEL = 'gemini-3-flash-preview'
+const FALLBACK_MODEL = 'gemma-4-31b-it'
+const SECONDARY_FALLBACK_MODEL = 'gemini-3.6-flash'
 const MAX_MESSAGES = 12
 const MAX_MESSAGE_LENGTH = 1200
 const WINDOW_MS = 10 * 60 * 1000
@@ -106,7 +107,10 @@ export default async function handler(req, res) {
       .map(message => `${message.role === 'assistant' ? 'Elev8rix' : 'Visitor'}: ${message.content}`)
       .join('\n\n')
 
-    const fallbackModel = process.env.GEMINI_FALLBACK_MODEL || FALLBACK_MODEL
+    const fallbackModels = [
+      process.env.GEMINI_FALLBACK_MODEL || FALLBACK_MODEL,
+      process.env.GEMINI_SECONDARY_FALLBACK_MODEL || SECONDARY_FALLBACK_MODEL,
+    ].filter((fallback, index, models) => fallback !== model && models.indexOf(fallback) === index)
     const requestInteraction = selectedModel => fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
       method: 'POST',
       headers: {
@@ -129,9 +133,10 @@ export default async function handler(req, res) {
     let upstreamError = geminiResponse.ok ? null : getUpstreamError(interaction)
     let { reason } = getSafeUpstreamDetails(upstreamError)
 
-    // Switch models on quota or model-specific failures. Credential errors are handled below.
-    const isCredentialFailure = reason === 'API_KEY_INVALID' || reason === 'SERVICE_DISABLED'
-    if (!geminiResponse.ok && !isCredentialFailure && selectedModel !== fallbackModel) {
+    // Switch models on quota, availability, or model-specific failures. Credential errors are handled below.
+    for (const fallbackModel of fallbackModels) {
+      const isCredentialFailure = reason === 'API_KEY_INVALID' || reason === 'SERVICE_DISABLED'
+      if (geminiResponse.ok || isCredentialFailure) break
       console.warn('[Elev8rix chat] Primary model unavailable; trying fallback:', JSON.stringify({
         model: selectedModel,
         fallbackModel,
@@ -162,6 +167,12 @@ export default async function handler(req, res) {
         return res.status(503).json({
           code: 'AI_CAPACITY_UNAVAILABLE',
           error: 'The studio assistant has reached its current message limit. Please try again soon, or email elev8rix@gmail.com.',
+        })
+      }
+      if (geminiResponse.status === 503 || reason === 'UNAVAILABLE') {
+        return res.status(503).json({
+          code: 'AI_CAPACITY_UNAVAILABLE',
+          error: 'Google AI is busy right now. Please try again shortly, or email elev8rix@gmail.com.',
         })
       }
       return res.status(502).json({
