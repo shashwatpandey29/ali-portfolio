@@ -152,12 +152,21 @@ export default async function handler(req, res) {
           error: 'The studio assistant has reached its current message limit. Please try again soon, or email elev8rix@gmail.com.',
         })
       }
-      return res.status(502).json({ error: 'I could not reach the studio assistant just now. Please try again or email elev8rix@gmail.com.' })
+      return res.status(502).json({
+        code: 'AI_PROVIDER_ERROR',
+        providerStatus: geminiResponse.status,
+        error: 'I could not reach the studio assistant just now. Please try again or email elev8rix@gmail.com.',
+      })
     }
 
     const reply = getOutputText(interaction)
     if (!reply) {
-      return res.status(502).json({ error: 'I could not form a reply just now. Please try again or email elev8rix@gmail.com.' })
+      console.error('[Elev8rix chat] Gemini returned no text output:', JSON.stringify({
+        model: selectedModel,
+        status: interaction?.status || 'UNKNOWN',
+        stepTypes: interaction?.steps?.map(step => step?.type) || [],
+      }))
+      return res.status(502).json({ code: 'AI_EMPTY_REPLY', error: 'I could not form a reply just now. Please try again or email elev8rix@gmail.com.' })
     }
 
     return res.status(200).json({ reply })
