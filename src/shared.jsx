@@ -62,23 +62,6 @@ export function useCurrency() {
   return [currency]
 }
 
-/* ─── Floating WhatsApp Quick-Chat Button ────────────── */
-export function WhatsAppFloat() {
-  return (
-    <a
-      href={agency.whatsapp}
-      target="_blank"
-      rel="noreferrer"
-      className="whatsapp-float"
-      aria-label="Chat with elev8rix on WhatsApp"
-      title="Chat on WhatsApp"
-    >
-      <MessageCircle size={20} />
-      <span>WhatsApp</span>
-    </a>
-  )
-}
-
 /* ─── Theme Toggle ──────────────────────────────────── */
 export function ThemeToggle() {
   const [theme, setTheme] = useState(() => {
@@ -844,7 +827,6 @@ export function SiteFooter({ brand, links, note, home = '/' }) {
           <span>· elev8rix ·</span>
         </div>
       </div>
-      <WhatsAppFloat />
     </footer>
   )
 }

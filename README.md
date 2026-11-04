@@ -23,6 +23,11 @@ npm run build
 ```
 The output is placed in the `dist/` folder.
 
+## Elev8rix AI assistant
+The floating **Ask Elev8rix** assistant uses Google's Gemini Interactions API through the server-only `/api/chat` function. The Gemini key is never sent to the browser. For local development, set `GEMINI_API_KEY` in the ignored `.env.local` file and run `npm run dev`; Vite loads the same server handler without exposing the key to the client. Configure `GEMINI_API_KEY` in the Vercel project environment variables for Production and Preview; optionally set `GEMINI_MODEL` to choose a supported Gemini model. The assistant uses stateless requests and does not store chat history in this app.
+
+The services page includes a separate **Custom AI agents** offer for tailored assistants, knowledge bases, integrations, and human handoff. General workflow integrations remain under **AI automation**.
+
 ## Preview Production Build
 You can serve the built files locally (requires `serve` which is installed as a dev dependency):
 ```bash

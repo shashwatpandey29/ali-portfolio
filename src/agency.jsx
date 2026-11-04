@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Asterisk, Check, CheckCheck, Clock, Copy, Loader2, Mail, MapPin, MessageCircle, MoveUpRight, Phone, Send, Sparkles } from 'lucide-react'
 import { agency, concepts, img } from './config.js'
 import { agencyServices as services } from './data/services.js'
+import ChatAssistant from './ChatAssistant.jsx'
 import {
   ArrowLink, CtaLink, DemoForm, Eyebrow, PageTransition, Reveal,
   ScrollProgress, SiteFooter, SiteNav, updatePageMeta,
@@ -48,6 +49,7 @@ export function AgencyLayout() {
             ['Email us', `mailto:${agency.email}`],
           ]}
         />
+        <ChatAssistant />
       </div>
     </SmoothScrollProvider>
   )
@@ -78,7 +80,7 @@ function HeroSection() {
 
           <motion.h1 custom={0.08} initial="hidden" animate="visible" variants={fade}>
             Make digital<br />
-            work <em>harder.</em>
+            work <em>smarter.</em>
           </motion.h1>
 
           <motion.p className="hero-lead" custom={0.16} initial="hidden" animate="visible" variants={fade}>

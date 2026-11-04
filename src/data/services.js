@@ -27,11 +27,19 @@ export const agencyServices = [
   ],
   [
     'AI automation',
-    'Practical AI agents and workflows that give your team more room for meaningful work.',
+    'Connected automations that remove repetitive work and keep your existing tools in sync.',
     Sparkles,
-    ['Custom LLM Agents', 'RAG Knowledge Bases', 'Workflow Pipelines', 'API Orchestration'],
+    ['Workflow Pipelines', 'CRM & Operations', 'API Orchestration', 'Human Approval Steps'],
     '1–3 weeks',
     { INR: 'From ₹40,000', USD: 'From $800' }
+  ],
+  [
+    'Custom AI agents',
+    'Branded assistants shaped around your knowledge, customers, and the way your team works.',
+    Sparkles,
+    ['Custom Instructions & Voice', 'Knowledge Base & RAG', 'Tool Integrations', 'Human Handoff & Guardrails'],
+    '2–6 weeks',
+    { INR: 'Scope-based', USD: 'Scope-based' }
   ],
   [
     'E-commerce',
