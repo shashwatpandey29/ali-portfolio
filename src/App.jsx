@@ -17,6 +17,7 @@ const FitnessPage = lazy(() => import('./fitness.jsx').then(m => ({ default: m.F
 
 const LegalLayout = lazy(() => import('./legal.jsx').then(m => ({ default: m.LegalLayout })))
 const LegalPage = lazy(() => import('./legal.jsx').then(m => ({ default: m.LegalPage })))
+const AgentDemoPage = lazy(() => import('./agent-demo.jsx'))
 
 function DemoFallback() {
   return (
@@ -63,6 +64,7 @@ export default function App() {
         {['services', 'work', 'about', 'contact'].map(path => (
           <Route key={path} path={path} element={<AgencyPage page={path} />} />
         ))}
+        <Route path="/projects/ai-agent" element={<Suspense fallback={<DemoFallback />}><AgentDemoPage /></Suspense>} />
         {/* Real 404 Route */}
         <Route path="*" element={<NotFoundPage />} />
       </Route>

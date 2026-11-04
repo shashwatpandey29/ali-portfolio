@@ -67,6 +67,15 @@ export const concepts = [
     preview: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=85',
     tone: 'legal',
   },
+  {
+    slug: 'ai-agent',
+    name: 'Elev8rix Agent Studio',
+    category: 'Custom AI agents',
+    description: 'A hands-on look at branded AI assistants grounded in approved knowledge, connected to useful tools, and ready to hand off when a person should step in.',
+    tags: ['Custom agent', 'Knowledge grounded', 'Human handoff'],
+    preview: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=85',
+    tone: 'agent',
+  },
 ]
 
 export const img = (id, w = 1200) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=85`

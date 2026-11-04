@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Asterisk, Check, CheckCheck, Clock, Copy, Loader2, Mail, MapPin, MessageCircle, MoveUpRight, Phone, Send, Sparkles } from 'lucide-react'
 import { agency, concepts, img } from './config.js'
@@ -16,6 +16,8 @@ const projects = concepts
 
 /* ─────────────────────────────────────────────────────── */
 export function AgencyLayout() {
+  const { pathname } = useLocation()
+  const isAgentDemo = pathname === '/projects/ai-agent'
   return (
     <SmoothScrollProvider>
       <div className="agency-theme">
@@ -46,10 +48,11 @@ export function AgencyLayout() {
             ['UrbanNest demo', '/projects/business'],
             ['Forge Athletics demo', '/projects/fitness'],
             ['Alder & Rowe demo', '/projects/legal'],
+            ['Custom AI agent demo', '/projects/ai-agent'],
             ['Email us', `mailto:${agency.email}`],
           ]}
         />
-        <ChatAssistant />
+        {!isAgentDemo && <ChatAssistant />}
       </div>
     </SmoothScrollProvider>
   )
@@ -319,7 +322,7 @@ function WorkPreview() {
             <Eyebrow>Selected concepts</Eyebrow>
             <h2 className="section-h2">Different stories.<br /><em>Made tangible.</em></h2>
           </div>
-          <p>Five self-initiated concepts show how tailored digital experiences can support hospitality, education, home services, fitness, and legal practices.</p>
+          <p>Explore tailored digital experiences for hospitality, education, home services, fitness, and legal practices, plus a hands-on custom AI agent prototype.</p>
         </div>
 
         <div className="project-grid">
@@ -477,6 +480,7 @@ export function AgencyPage({ page }) {
                   </div>
                   <div className="service-footer">
                     <ArrowLink to="/contact">Book this service ({price[currency]})</ArrowLink>
+                    {name === 'Custom AI agents' && <Link className="service-demo-link" to="/projects/ai-agent">Try the live demo <MoveUpRight size={13} /></Link>}
                     <MoveUpRight size={16} className="tile-arrow-inline" />
                   </div>
                 </article>
@@ -495,7 +499,7 @@ export function AgencyPage({ page }) {
       <div className="wrap inner-hero">
         <Eyebrow>Selected concepts</Eyebrow>
         <h1>Good work in<br /><em>different worlds.</em></h1>
-        <p>Each interactive concept explores what thoughtful design and fast engineering can do for hospitality, education, and local service brands in India and beyond.</p>
+          <p>Each interactive concept explores what thoughtful design and fast engineering can do for growing businesses, including a hands-on custom AI agent prototype.</p>
       </div>
       <WorkPreview />
       <ContactCta />

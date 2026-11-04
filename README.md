@@ -1,7 +1,7 @@
 # elev8rix — Digital Experience Studio
 
 ## Overview
-The elev8rix portfolio pairs a responsive digital studio site with five interactive industry concepts: hospitality, education, home services, fitness, and legal. It is built with **Vite + React**, styled with **Tailwind CSS**, animated with **Framer Motion**, and smooth-scrolled with **Lenis**.
+The elev8rix portfolio pairs a responsive digital studio site with five interactive industry concepts and a custom AI agent prototype. It is built with **Vite + React**, styled with **Tailwind CSS**, animated with **Framer Motion**, and smooth-scrolled with **Lenis**.
 
 ## Getting Started
 ```bash
@@ -24,7 +24,7 @@ npm run build
 The output is placed in the `dist/` folder.
 
 ## Elev8rix AI assistant
-The floating **Ask Elev8rix** assistant uses Google's Interactions API through the server-only `/api/chat` function. The Gemini key is never sent to the browser. For local development, set `GEMINI_API_KEY` in the ignored `.env.local` file and run `npm run dev`; Vite loads the same server handler without exposing the key to the client. Configure `GEMINI_API_KEY` in the Vercel project environment variables for Production and Preview. The assistant defaults to Gemini 3 Flash and falls back to Gemma 4 31B IT, then Gemini 3.6 Flash, when a model is unavailable; optionally set `GEMINI_MODEL`, `GEMINI_FALLBACK_MODEL`, or `GEMINI_SECONDARY_FALLBACK_MODEL` to choose other supported text models. It uses stateless requests and does not store chat history in this app.
+The floating **Ask Elev8rix** assistant uses Google's Interactions API through the server-only `/api/chat` function. The Gemini key is never sent to the browser. For local development, set `GEMINI_API_KEY` in the ignored `.env.local` file and run `npm run dev`; Vite loads the same server handler without exposing the key to the client. Configure `GEMINI_API_KEY` in the Vercel project environment variables for Production and Preview. The assistant tries Gemini 3.1 Flash-Lite first, then Gemini 3.5 Flash-Lite, then Gemma 4 31B IT; no other model IDs are used. It uses stateless requests and does not store chat history in this app.
 
 The services page includes a separate **Custom AI agents** offer for tailored assistants, knowledge bases, integrations, and human handoff. General workflow integrations remain under **AI automation**.
 

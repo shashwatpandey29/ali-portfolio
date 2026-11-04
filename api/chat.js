@@ -1,9 +1,7 @@
 // Vercel Serverless Function: /api/chat
 // Keeps the Gemini API key on the server and sends stateless, bounded chat turns.
 
-const DEFAULT_MODEL = 'gemini-3-flash-preview'
-const FALLBACK_MODEL = 'gemma-4-31b-it'
-const SECONDARY_FALLBACK_MODEL = 'gemini-3.6-flash'
+const CHAT_MODELS = ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemma-4-31b-it']
 const MAX_MESSAGES = 12
 const MAX_MESSAGE_LENGTH = 1200
 const WINDOW_MS = 10 * 60 * 1000
@@ -77,7 +75,7 @@ export default async function handler(req, res) {
       error: 'The Elev8rix assistant is temporarily unavailable. Please email elev8rix@gmail.com.',
     })
   }
-  const model = process.env.GEMINI_MODEL || DEFAULT_MODEL
+  const model = CHAT_MODELS[0]
 
   const forwardedFor = req.headers['x-forwarded-for']
   const ip = typeof forwardedFor === 'string' ? forwardedFor.split(',')[0].trim() : req.socket?.remoteAddress || 'unknown'
@@ -107,10 +105,7 @@ export default async function handler(req, res) {
       .map(message => `${message.role === 'assistant' ? 'Elev8rix' : 'Visitor'}: ${message.content}`)
       .join('\n\n')
 
-    const fallbackModels = [
-      process.env.GEMINI_FALLBACK_MODEL || FALLBACK_MODEL,
-      process.env.GEMINI_SECONDARY_FALLBACK_MODEL || SECONDARY_FALLBACK_MODEL,
-    ].filter((fallback, index, models) => fallback !== model && models.indexOf(fallback) === index)
+    const fallbackModels = CHAT_MODELS.slice(1)
     const requestInteraction = selectedModel => fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
       method: 'POST',
       headers: {

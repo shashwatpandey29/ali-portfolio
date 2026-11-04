@@ -32,7 +32,13 @@ const routes = [
     path: 'work',
     outputPath: 'work/index.html',
     title: 'Work & Concepts · elev8rix',
-    description: 'Explore live interactive concepts built by elev8rix across hospitality, education, home services, fitness, and legal practices.',
+    description: 'Explore live concepts built by elev8rix across hospitality, education, home services, fitness, legal practices, and custom AI agents.',
+  },
+  {
+    path: 'projects/ai-agent',
+    outputPath: 'projects/ai-agent/index.html',
+    title: 'Custom AI Agent Demo · elev8rix',
+    description: 'Try a simulated custom AI agent grounded in business knowledge, connected to useful actions, and designed with human handoff.',
   },
   {
     path: 'about',
