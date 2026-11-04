@@ -51,6 +51,17 @@ function getUpstreamError(payload) {
   return item?.error || item?.errors?.[0] || null
 }
 
+function getSafeUpstreamDetails(upstreamError) {
+  const message = typeof upstreamError?.message === 'string'
+    ? upstreamError.message.replace(/AIza[\w-]{20,}/g, '[redacted]').slice(0, 180)
+    : undefined
+  return {
+    reason: upstreamError?.details?.find(detail => detail?.['@type']?.endsWith('ErrorInfo'))?.reason || upstreamError?.status || 'UPSTREAM_REJECTED',
+    code: upstreamError?.code,
+    message,
+  }
+}
+
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store')
 
@@ -116,7 +127,7 @@ export default async function handler(req, res) {
     let geminiResponse = await requestInteraction(selectedModel)
     let interaction = await geminiResponse.json().catch(() => null)
     let upstreamError = geminiResponse.ok ? null : getUpstreamError(interaction)
-    let reason = upstreamError?.details?.find(detail => detail?.['@type']?.endsWith('ErrorInfo'))?.reason
+    let { reason } = getSafeUpstreamDetails(upstreamError)
 
     // Switch models on quota or model-specific failures. Credential errors are handled below.
     const isCredentialFailure = reason === 'API_KEY_INVALID' || reason === 'SERVICE_DISABLED'
@@ -125,20 +136,21 @@ export default async function handler(req, res) {
         model: selectedModel,
         fallbackModel,
         httpStatus: geminiResponse.status,
-        reason: reason || 'UPSTREAM_REJECTED',
+        ...getSafeUpstreamDetails(upstreamError),
       }))
       selectedModel = fallbackModel
       geminiResponse = await requestInteraction(selectedModel)
       interaction = await geminiResponse.json().catch(() => null)
       upstreamError = geminiResponse.ok ? null : getUpstreamError(interaction)
-      reason = upstreamError?.details?.find(detail => detail?.['@type']?.endsWith('ErrorInfo'))?.reason
+      ;({ reason } = getSafeUpstreamDetails(upstreamError))
     }
 
     if (!geminiResponse.ok) {
       const configurationFailure = reason === 'API_KEY_INVALID' || reason === 'SERVICE_DISABLED'
       console.error('[Elev8rix chat] Gemini request failed:', JSON.stringify({
+        model: selectedModel,
         httpStatus: geminiResponse.status,
-        reason: reason || upstreamError?.status || 'UPSTREAM_REJECTED',
+        ...getSafeUpstreamDetails(upstreamError),
       }))
       if (configurationFailure) {
         return res.status(503).json({
