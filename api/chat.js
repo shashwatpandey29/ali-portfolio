@@ -118,9 +118,15 @@ export default async function handler(req, res) {
     let upstreamError = geminiResponse.ok ? null : getUpstreamError(interaction)
     let reason = upstreamError?.details?.find(detail => detail?.['@type']?.endsWith('ErrorInfo'))?.reason
 
-    // Use the lower-traffic model automatically when the primary model hits a quota limit.
-    if (!geminiResponse.ok && (geminiResponse.status === 429 || reason === 'RESOURCE_EXHAUSTED') && selectedModel !== fallbackModel) {
-      console.warn('[Elev8rix chat] Primary model quota reached; trying fallback:', JSON.stringify({ model: selectedModel, fallbackModel }))
+    // Switch models on quota or model-specific failures. Credential errors are handled below.
+    const isCredentialFailure = reason === 'API_KEY_INVALID' || reason === 'SERVICE_DISABLED'
+    if (!geminiResponse.ok && !isCredentialFailure && selectedModel !== fallbackModel) {
+      console.warn('[Elev8rix chat] Primary model unavailable; trying fallback:', JSON.stringify({
+        model: selectedModel,
+        fallbackModel,
+        httpStatus: geminiResponse.status,
+        reason: reason || 'UPSTREAM_REJECTED',
+      }))
       selectedModel = fallbackModel
       geminiResponse = await requestInteraction(selectedModel)
       interaction = await geminiResponse.json().catch(() => null)
