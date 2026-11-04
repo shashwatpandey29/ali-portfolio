@@ -590,11 +590,17 @@ export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backT
                     className="nav-dropdown-wrapper"
                     onMouseEnter={handleWorkMouseEnter}
                     onMouseLeave={handleWorkMouseLeave}
+                    onFocusCapture={handleWorkMouseEnter}
+                    onBlurCapture={event => {
+                      if (!event.currentTarget.contains(event.relatedTarget)) handleWorkMouseLeave()
+                    }}
                   >
                     <NavLink
                       to={to}
                       end={to === backTo}
                       className="nav-dropdown-trigger"
+                      aria-expanded={workDropdownOpen}
+                      aria-controls={workDropdownOpen ? 'work-concepts-menu' : undefined}
                       onClick={() => setWorkDropdownOpen(false)}
                     >
                       <span>{name}</span>
@@ -605,6 +611,7 @@ export function SiteNav({ brand, links, cta, mobileCta, theme = 'generic', backT
                       {workDropdownOpen && (
                         <motion.div
                           className="nav-dropdown-menu"
+                          id="work-concepts-menu"
                           initial={{ opacity: 0, y: 10, scale: 0.96 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 8, scale: 0.97 }}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, RotateCcw, Send, Sparkles, X } from 'lucide-react'
+import { ArrowUpRight, RotateCcw, Send, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const welcomeMessage = {
@@ -18,6 +18,13 @@ export default function ChatAssistant() {
   const reducedMotion = useReducedMotion()
   const endRef = useRef(null)
   const inputRef = useRef(null)
+  const launcherRef = useRef(null)
+  const widgetRef = useRef(null)
+
+  function closeChat() {
+    setOpen(false)
+    requestAnimationFrame(() => launcherRef.current?.focus())
+  }
 
   useEffect(() => {
     if (open) inputRef.current?.focus()
@@ -30,20 +37,31 @@ export default function ChatAssistant() {
   useEffect(() => {
     if (!open) return undefined
     const onKeyDown = event => {
-      if (event.key === 'Escape') setOpen(false)
+      if (event.key === 'Escape') closeChat()
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [open])
 
-  async function sendMessage(value = draft) {
+  useEffect(() => {
+    if (!open) return undefined
+    const onPointerDown = event => {
+      if (!widgetRef.current?.contains(event.target)) setOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [open])
+
+  async function sendMessage(value = draft, retry = false) {
     const content = value.trim()
     if (!content || sending || content.length > 1200) return
 
     const userMessage = { role: 'user', content }
-    const thread = [...messages, userMessage].slice(-12)
+    const thread = retry
+      ? messages.filter(message => !message.isError).slice(-12)
+      : [...messages, userMessage].slice(-12)
     setMessages(thread)
-    setDraft('')
+    if (!retry) setDraft('')
     setSending(true)
 
     try {
@@ -53,18 +71,28 @@ export default function ChatAssistant() {
         body: JSON.stringify({ messages: thread }),
       })
       const result = await response.json().catch(() => ({}))
-      if (!response.ok) throw new Error(result.error || 'The assistant is unavailable right now.')
+      if (!response.ok) {
+        const error = new Error(result.error || 'The assistant is unavailable right now.')
+        error.code = result.code
+        throw error
+      }
       setMessages(current => [...current, { role: 'assistant', content: result.reply }].slice(-13))
     } catch (error) {
       setMessages(current => [...current, {
         role: 'assistant',
         content: error.message || 'I hit a temporary issue. Please try again or email elev8rix@gmail.com.',
         isError: true,
+        code: error.code,
       }].slice(-13))
     } finally {
       setSending(false)
-      requestAnimationFrame(() => inputRef.current?.focus())
+      requestAnimationFrame(() => { if (open) inputRef.current?.focus() })
     }
+  }
+
+  function retryLastMessage() {
+    const previousUserMessage = [...messages].reverse().find(message => message.role === 'user')
+    if (previousUserMessage) sendMessage(previousUserMessage.content, true)
   }
 
   function resetConversation() {
@@ -74,7 +102,7 @@ export default function ChatAssistant() {
   }
 
   return (
-    <div className="elev8rix-chat-widget">
+    <div className="elev8rix-chat-widget" ref={widgetRef}>
       <AnimatePresence>
         {open && (
           <motion.section
@@ -88,7 +116,13 @@ export default function ChatAssistant() {
             transition={{ duration: 0.2, ease: 'easeOut' }}
           >
             <header className="elev8rix-chat-header">
-              <div className="elev8rix-chat-avatar"><Sparkles size={17} /></div>
+              <div className="elev8rix-chat-avatar" aria-hidden="true">
+                <svg viewBox="0 0 42 42" focusable="false">
+                  <path d="M21 8V4h6V2" fill="none" stroke="#e8e1ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <rect x="6" y="9" width="30" height="25" rx="9" fill="#19172f" stroke="#9a8be4" strokeWidth="1.5" />
+                  <path d="M15 19v5m12-5v5m-9 4c2 1.5 4 1.5 6 0" fill="none" stroke="#a8edff" strokeWidth="2.3" strokeLinecap="round" />
+                </svg>
+              </div>
               <div className="elev8rix-chat-heading">
                 <strong>Elev8rix</strong>
                 <span>Studio guide · AI assistant</span>
@@ -96,7 +130,7 @@ export default function ChatAssistant() {
               <button type="button" className="elev8rix-chat-icon-button" aria-label="Start a new conversation" title="New conversation" onClick={resetConversation} disabled={sending}>
                 <RotateCcw size={16} />
               </button>
-              <button type="button" className="elev8rix-chat-icon-button" aria-label="Close chat" onClick={() => setOpen(false)}>
+              <button type="button" className="elev8rix-chat-icon-button" aria-label="Close chat" onClick={closeChat}>
                 <X size={18} />
               </button>
             </header>
@@ -105,7 +139,15 @@ export default function ChatAssistant() {
               <div className="elev8rix-chat-note">A little about what you're building is a great place to start.</div>
               {messages.map((message, index) => (
                 <div className={`elev8rix-chat-message ${message.role === 'user' ? 'from-visitor' : 'from-elev8rix'}${message.isError ? ' is-error' : ''}`} key={`${index}-${message.role}`}>
-                  {message.content}
+                  {message.isError ? (
+                    <>
+                      <span>{message.content}</span>
+                      <div className="elev8rix-chat-error-actions">
+                        <button type="button" onClick={retryLastMessage} disabled={sending}>Try again</button>
+                        <a href="mailto:elev8rix@gmail.com">Email the team</a>
+                      </div>
+                    </>
+                  ) : message.content}
                 </div>
               ))}
               {messages.length === 1 && !sending && (
@@ -129,7 +171,12 @@ export default function ChatAssistant() {
                 ref={inputRef}
                 id="elev8rix-chat-input"
                 value={draft}
-                onChange={event => setDraft(event.target.value.slice(0, 1200))}
+                onChange={event => {
+                  const nextDraft = event.target.value.slice(0, 1200)
+                  setDraft(nextDraft)
+                  event.currentTarget.style.height = 'auto'
+                  event.currentTarget.style.height = `${Math.min(event.currentTarget.scrollHeight, 104)}px`
+                }}
                 onKeyDown={event => {
                   if (event.key === 'Enter' && !event.shiftKey) {
                     event.preventDefault()
@@ -137,6 +184,7 @@ export default function ChatAssistant() {
                   }
                 }}
                 placeholder="Ask us anything…"
+                aria-describedby="elev8rix-chat-compose-hint"
                 rows={1}
                 maxLength={1200}
                 disabled={sending}
@@ -144,6 +192,10 @@ export default function ChatAssistant() {
               <button type="submit" className="elev8rix-chat-send" aria-label="Send message" disabled={sending || !draft.trim()}>
                 <Send size={16} />
               </button>
+              <div className="elev8rix-chat-compose-hint" id="elev8rix-chat-compose-hint">
+                <span>Enter to send · Shift + Enter for a new line</span>
+                <span>{draft.length}/1200</span>
+              </div>
             </form>
             <div className="elev8rix-chat-footer">
               <span>AI can make mistakes. Please don't share sensitive information.</span>
@@ -154,13 +206,14 @@ export default function ChatAssistant() {
       </AnimatePresence>
 
       <motion.button
+        ref={launcherRef}
         type="button"
         className={`elev8rix-chat-launcher${open ? ' is-open' : ''}`}
         aria-label={open ? 'Close Elev8rix chat' : 'Chat with Elev8rix'}
         aria-expanded={open}
-        aria-controls="elev8rix-chat-panel"
+        aria-controls={open ? 'elev8rix-chat-panel' : undefined}
         title={open ? 'Close chat' : 'Ask Elev8rix'}
-        onClick={() => setOpen(value => !value)}
+        onClick={() => { if (open) closeChat(); else setOpen(true) }}
         whileTap={reducedMotion ? undefined : { scale: 0.94 }}
       >
         <span className="elev8rix-chat-mascot" aria-hidden="true">

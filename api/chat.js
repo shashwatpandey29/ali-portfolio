@@ -2,6 +2,7 @@
 // Keeps the Gemini API key on the server and sends stateless, bounded chat turns.
 
 const DEFAULT_MODEL = 'gemini-3.8-flash'
+const FALLBACK_MODEL = 'gemma-4-31b-it'
 const MAX_MESSAGES = 12
 const MAX_MESSAGE_LENGTH = 1200
 const WINDOW_MS = 10 * 60 * 1000
@@ -43,6 +44,11 @@ function getOutputText(interaction) {
     .map(part => part.text)
     .join('')
     .trim()
+}
+
+function getUpstreamError(payload) {
+  const item = Array.isArray(payload) ? payload[0] : payload
+  return item?.error || item?.errors?.[0] || null
 }
 
 export default async function handler(req, res) {
@@ -89,25 +95,57 @@ export default async function handler(req, res) {
       .map(message => `${message.role === 'assistant' ? 'Elev8rix' : 'Visitor'}: ${message.content}`)
       .join('\n\n')
 
-    const geminiResponse = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+    const fallbackModel = process.env.GEMINI_FALLBACK_MODEL || FALLBACK_MODEL
+    const requestInteraction = selectedModel => fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-goog-api-key': apiKey,
       },
       body: JSON.stringify({
-        model,
+        model: selectedModel,
         system_instruction: SYSTEM_INSTRUCTION,
         input: conversation,
         store: false,
-        generation_config: { thinking_level: 'low' },
+        generation_config: { thinking_level: selectedModel.startsWith('gemma-') ? 'minimal' : 'low' },
       }),
       signal: AbortSignal.timeout(25000),
     })
 
-    const interaction = await geminiResponse.json().catch(() => null)
+    let selectedModel = model
+    let geminiResponse = await requestInteraction(selectedModel)
+    let interaction = await geminiResponse.json().catch(() => null)
+    let upstreamError = geminiResponse.ok ? null : getUpstreamError(interaction)
+    let reason = upstreamError?.details?.find(detail => detail?.['@type']?.endsWith('ErrorInfo'))?.reason
+
+    // Use the lower-traffic model automatically when the primary model hits a quota limit.
+    if (!geminiResponse.ok && (geminiResponse.status === 429 || reason === 'RESOURCE_EXHAUSTED') && selectedModel !== fallbackModel) {
+      console.warn('[Elev8rix chat] Primary model quota reached; trying fallback:', JSON.stringify({ model: selectedModel, fallbackModel }))
+      selectedModel = fallbackModel
+      geminiResponse = await requestInteraction(selectedModel)
+      interaction = await geminiResponse.json().catch(() => null)
+      upstreamError = geminiResponse.ok ? null : getUpstreamError(interaction)
+      reason = upstreamError?.details?.find(detail => detail?.['@type']?.endsWith('ErrorInfo'))?.reason
+    }
+
     if (!geminiResponse.ok) {
-      console.error('[Elev8rix chat] Gemini request failed with status:', geminiResponse.status)
+      const configurationFailure = reason === 'API_KEY_INVALID' || reason === 'SERVICE_DISABLED'
+      console.error('[Elev8rix chat] Gemini request failed:', JSON.stringify({
+        httpStatus: geminiResponse.status,
+        reason: reason || upstreamError?.status || 'UPSTREAM_REJECTED',
+      }))
+      if (configurationFailure) {
+        return res.status(503).json({
+          code: 'AI_CONFIGURATION_ERROR',
+          error: 'The Elev8rix assistant is being configured. Please email elev8rix@gmail.com if you need help now.',
+        })
+      }
+      if (geminiResponse.status === 429 || reason === 'RESOURCE_EXHAUSTED') {
+        return res.status(503).json({
+          code: 'AI_CAPACITY_UNAVAILABLE',
+          error: 'The studio assistant has reached its current message limit. Please try again soon, or email elev8rix@gmail.com.',
+        })
+      }
       return res.status(502).json({ error: 'I could not reach the studio assistant just now. Please try again or email elev8rix@gmail.com.' })
     }
 
