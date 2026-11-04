@@ -1,8 +1,8 @@
 // Vercel Serverless Function: /api/chat
 // Keeps the Gemini API key on the server and sends stateless, bounded chat turns.
 
-const DEFAULT_MODEL = 'gemini-3.8-flash'
-const FALLBACK_MODEL = 'gemma-4-31b-it'
+const DEFAULT_MODEL = 'gemma-4-31b-it'
+const FALLBACK_MODEL = 'gemini-3.8-flash'
 const MAX_MESSAGES = 12
 const MAX_MESSAGE_LENGTH = 1200
 const WINDOW_MS = 10 * 60 * 1000
